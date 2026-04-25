@@ -58,6 +58,9 @@ const config: Config = {
         '.text-stroke-1.5': {
           WebkitTextStroke: '1.5px currentColor',
         },
+        '.text-stroke-black': {
+          WebkitTextStroke: '1px black',
+        },
       });
     },
   ],
