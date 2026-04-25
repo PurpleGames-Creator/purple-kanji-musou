@@ -36,119 +36,116 @@ export function DifficultySelector() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-4 relative">
-      <AnimatedBackground />
-      <div className="relative z-10 w-full flex flex-col items-center">
-        {/* タイトル */}
-        <motion.h1
-        initial={{ opacity: 0, y: -20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        className="text-4xl sm:text-5xl font-bold text-purple-900 mb-2 text-center"
-      >
-        <span>Purple</span><span className="font-black text-stroke-1.5">漢字無双</span>
-      </motion.h1>
+    <div
+      className="flex flex-col items-center justify-center min-h-screen px-4 relative"
+      style={{
+        backgroundImage: 'url(/title-background.png)',
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        backgroundAttachment: 'fixed'
+      }}
+    >
+      {/* 背景オーバーレイ */}
+      <div className="absolute inset-0 bg-black/20 z-0"></div>
 
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, delay: 0.2 }}
-        className="text-lg text-purple-700 mb-10 text-center"
-      >
-        漢字の読みをテキスト入力で答えよう！
-      </motion.p>
+      <div className="relative z-10 w-full flex flex-col items-center justify-start pt-4 min-h-screen">
+        {/* スペーサー - コンテンツを下に配置 */}
+        <div className="flex-1"></div>
 
-      {/* ニックネーム入力 */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.3 }}
-        className="w-full max-w-sm mb-8"
-      >
-        <label className="block text-sm font-semibold text-purple-900 mb-2">
-          ニックネーム
-        </label>
-        <input
-          type="text"
-          value={nickname}
-          onChange={(e) => setNickname(e.target.value.slice(0, 30))}
-          placeholder="例：むらさき太郎"
-          maxLength={30}
-          className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 transition text-black placeholder-gray-500"
-        />
-        <p className="text-xs text-purple-600 mt-1">{nickname.length} / 30</p>
-      </motion.div>
+        {/* ニックネーム入力 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          className="w-full max-w-sm mb-6"
+        >
+          <label className="block text-sm font-semibold text-white mb-2 drop-shadow-lg">
+            ニックネーム
+          </label>
+          <input
+            type="text"
+            value={nickname}
+            onChange={(e) => setNickname(e.target.value.slice(0, 30))}
+            placeholder="例：むらさき太郎"
+            maxLength={30}
+            className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 transition text-black placeholder-gray-500"
+          />
+          <p className="text-xs text-white drop-shadow-lg mt-1">{nickname.length} / 30</p>
+        </motion.div>
 
-      {/* 難易度選択 */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6, delay: 0.4 }}
-        className="w-full max-w-lg"
-      >
-        <label className="block text-sm font-semibold text-purple-900 mb-4">
-          難易度を選択
-        </label>
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-          {difficulties.map((difficulty, index) => {
-            const isUnlocked = isDifficultyUnlocked(difficulty);
-            return (
-              <motion.div
-                key={difficulty}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.4, delay: 0.5 + index * 0.1 }}
-                className="relative"
-              >
-                <motion.button
-                  whileHover={isUnlocked ? { scale: 1.05 } : {}}
-                  whileTap={isUnlocked ? { scale: 0.95 } : {}}
-                  onClick={() => isUnlocked && setSelectedDifficulty(difficulty)}
-                  disabled={!isUnlocked}
-                  className={`w-full py-4 px-3 rounded-lg font-black text-lg transition-all ${
-                    !isUnlocked
-                      ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
-                      : selectedDifficulty === difficulty
-                        ? 'bg-purple-600 text-white shadow-lg ring-2 ring-purple-300'
-                        : 'bg-purple-100 text-purple-900 hover:bg-purple-200'
-                  }`}
+        {/* 難易度選択 */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          className="w-full max-w-lg mb-8"
+        >
+          <label className="block text-sm font-semibold text-white mb-4 drop-shadow-lg">
+            難易度を選択
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+            {difficulties.map((difficulty, index) => {
+              const isUnlocked = isDifficultyUnlocked(difficulty);
+              return (
+                <motion.div
+                  key={difficulty}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
+                  className="relative"
                 >
-                  {getDifficultyLabel(difficulty as DifficultyLevel)}
-                </motion.button>
-                {!isUnlocked && (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-xl">🔒</span>
-                  </div>
-                )}
-              </motion.div>
-            );
-          })}
-        </div>
-      </motion.div>
+                  <motion.button
+                    whileHover={isUnlocked ? { scale: 1.05 } : {}}
+                    whileTap={isUnlocked ? { scale: 0.95 } : {}}
+                    onClick={() => isUnlocked && setSelectedDifficulty(difficulty)}
+                    disabled={!isUnlocked}
+                    className={`w-full py-3 px-2 rounded-lg font-bold text-sm sm:text-base transition-all ${
+                      !isUnlocked
+                        ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
+                        : selectedDifficulty === difficulty
+                          ? 'bg-purple-600 text-white shadow-lg ring-2 ring-purple-300'
+                          : 'bg-purple-100 text-purple-900 hover:bg-purple-200'
+                    }`}
+                  >
+                    {getDifficultyLabel(difficulty as DifficultyLevel)}
+                  </motion.button>
+                  {!isUnlocked && (
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="text-lg">🔒</span>
+                    </div>
+                  )}
+                </motion.div>
+              );
+            })}
+          </div>
+        </motion.div>
 
-      {/* スタートボタン - 常に表示、ニックネーム入力で有効化 */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.4, delay: 0.6 }}
-        className="mt-10"
-      >
-        {isReadyToStart ? (
-          <Link
-            href={`/quiz/${selectedDifficulty}?nickname=${encodeURIComponent(nickname)}`}
-            className="inline-block px-8 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold text-lg rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg hover:shadow-purple-lg"
-          >
-            ゲームスタート！
-          </Link>
-        ) : (
-          <button
-            disabled
-            className="inline-block px-8 py-4 bg-gray-400 text-gray-200 font-bold text-lg rounded-lg cursor-not-allowed opacity-70"
-          >
-            ゲームスタート！
-          </button>
-        )}
-      </motion.div>
+        {/* スタートボタン */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, delay: 0.5 }}
+          className="mb-10"
+        >
+          {isReadyToStart ? (
+            <Link
+              href={`/quiz/${selectedDifficulty}?nickname=${encodeURIComponent(nickname)}`}
+              className="inline-block px-10 py-4 bg-gradient-to-r from-purple-600 to-purple-700 text-white font-bold text-lg rounded-lg hover:from-purple-700 hover:to-purple-800 transition-all shadow-lg hover:shadow-purple-lg"
+            >
+              🎮 ゲームスタート！
+            </Link>
+          ) : (
+            <button
+              disabled
+              className="inline-block px-10 py-4 bg-gray-400 text-gray-200 font-bold text-lg rounded-lg cursor-not-allowed opacity-70"
+            >
+              ゲームスタート！
+            </button>
+          )}
+        </motion.div>
+
+        {/* スペーサー - フッター用 */}
+        <div className="flex-1"></div>
       </div>
     </div>
   );
