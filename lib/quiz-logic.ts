@@ -2,6 +2,7 @@
  * ユーザー入力が正解かどうかを判定
  * 新形式対応：correctAnswers に複数の正解形式（ひらがな・漢字）を含む
  * 例：["すわる", "座る"]
+ * 送り仮名対応：「すわる」の場合「すわ」でも正解
  */
 export function validateAnswer(
   userInput: string,
@@ -19,7 +20,34 @@ export function validateAnswer(
     }
   }
 
+  // 送り仮名を除いた形式も判定
+  // 例：「すわる」→「る」を除いた「すわ」も正解
+  const okuriPatterns = ['る', 'い', 'た', 'ない', 'たい', 'ている', 'られる', 'せる', 'させる', 'めく'];
+
+  for (const correctAnswer of answerList) {
+    const trimmed = correctAnswer.trim();
+
+    // ひらがなの場合のみ送り仮名チェック
+    if (isHiragana(trimmed)) {
+      for (const okuri of okuriPatterns) {
+        if (trimmed.endsWith(okuri)) {
+          const withoutOkuri = trimmed.slice(0, -okuri.length);
+          if (normalized === withoutOkuri && withoutOkuri.length > 0) {
+            return true;
+          }
+        }
+      }
+    }
+  }
+
   return false;
+}
+
+/**
+ * 文字列がすべてひらがなかどうかを判定
+ */
+function isHiragana(str: string): boolean {
+  return /^[ぁ-ん゙ ゚]+$/.test(str);
 }
 
 /**
