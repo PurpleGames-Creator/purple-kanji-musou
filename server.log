@@ -1,0 +1,73 @@
+
+> purple-kanji-musou@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.4 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.0.104:3000
+- Environments: .env.local
+✓ Ready in 1300ms
+
+ GET /api/quiz/questions/easy 200 in 1244ms (next.js: 1214ms, application-code: 30ms)
+ GET /api/quiz/questions/easy 200 in 36ms (next.js: 20ms, application-code: 16ms)
+ GET /api/quiz/questions/easy 200 in 25ms (next.js: 12ms, application-code: 12ms)
+ GET /api/quiz/questions/easy 200 in 22ms (next.js: 11ms, application-code: 11ms)
+Validation error: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at async POST (app\api\quiz\validate\route.ts:6:18)
+  4 | export async function POST(request: NextRequest) {
+  5 |   try {
+> 6 |     const body = await request.json();
+    |                  ^
+  7 |     const { userInput, correctAnswers } = body;
+  8 |
+  9 |     if (!userInput || !correctAnswers) {
+ POST /api/quiz/validate 500 in 219ms (next.js: 51ms, application-code: 168ms)
+Validation error: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at async POST (app\api\quiz\validate\route.ts:6:18)
+  4 | export async function POST(request: NextRequest) {
+  5 |   try {
+> 6 |     const body = await request.json();
+    |                  ^
+  7 |     const { userInput, correctAnswers } = body;
+  8 |
+  9 |     if (!userInput || !correctAnswers) {
+ POST /api/quiz/validate 500 in 84ms (next.js: 5ms, application-code: 79ms)
+Validation error: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at async POST (app\api\quiz\validate\route.ts:6:18)
+  4 | export async function POST(request: NextRequest) {
+  5 |   try {
+> 6 |     const body = await request.json();
+    |                  ^
+  7 |     const { userInput, correctAnswers } = body;
+  8 |
+  9 |     if (!userInput || !correctAnswers) {
+ POST /api/quiz/validate 500 in 86ms (next.js: 4ms, application-code: 81ms)
+Validation error: SyntaxError: Expected property name or '}' in JSON at position 1 (line 1 column 2)
+    at JSON.parse (<anonymous>)
+    at async POST (app\api\quiz\validate\route.ts:6:18)
+  4 | export async function POST(request: NextRequest) {
+  5 |   try {
+> 6 |     const body = await request.json();
+    |                  ^
+  7 |     const { userInput, correctAnswers } = body;
+  8 |
+  9 |     if (!userInput || !correctAnswers) {
+ POST /api/quiz/validate 500 in 68ms (next.js: 3ms, application-code: 65ms)
+ POST /api/quiz/validate 200 in 17ms (next.js: 4ms, application-code: 13ms)
+ POST /api/quiz/validate 200 in 13ms (next.js: 5ms, application-code: 8ms)
+ POST /api/quiz/validate 200 in 14ms (next.js: 5ms, application-code: 9ms)
+ POST /api/quiz/validate 200 in 11ms (next.js: 4ms, application-code: 7ms)
+ POST /api/quiz/validate 200 in 12ms (next.js: 5ms, application-code: 8ms)
+ POST /api/quiz/validate 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ POST /api/quiz/validate 200 in 14ms (next.js: 4ms, application-code: 10ms)
+ POST /api/quiz/validate 200 in 12ms (next.js: 4ms, application-code: 8ms)
+ GET / 200 in 332ms (next.js: 132ms, application-code: 200ms)
+ GET /quiz/easy?nickname=TestUser 200 in 1697ms (next.js: 1625ms, application-code: 72ms)
+ GET /quiz/normal?nickname=TestUser 200 in 56ms (next.js: 20ms, application-code: 37ms)
+ GET /quiz/hard?nickname=TestUser 200 in 40ms (next.js: 7ms, application-code: 33ms)
+ GET /quiz/veryhard?nickname=TestUser 200 in 49ms (next.js: 10ms, application-code: 40ms)
+ GET /quiz/hellish?nickname=TestUser 200 in 39ms (next.js: 9ms, application-code: 31ms)
+ GET / 200 in 62ms (next.js: 13ms, application-code: 48ms)

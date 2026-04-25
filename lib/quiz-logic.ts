@@ -49,9 +49,10 @@ export function validateAnswer(
 
 /**
  * 文字列がすべてひらがなかどうかを判定
+ * マクロン（ー）も許可（例：でぃすこーす）
  */
 function isHiragana(str: string): boolean {
-  return /^[ぁ-ん゙ ゚]+$/.test(str);
+  return /^[ぁ-ん゙ ゚ー]+$/.test(str);
 }
 
 /**

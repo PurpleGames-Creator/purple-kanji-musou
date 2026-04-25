@@ -252,47 +252,8 @@ function QuizContent({
     }, 2000);
   };
 
-  // キーボード表示時のスクロール位置ロック（iOS・Android対応）
-  useEffect(() => {
-    let scrollPosition = 0;
-
-    const handleInputFocus = () => {
-      // スクロール位置を保存
-      scrollPosition = window.scrollY || window.pageYOffset;
-      // スクロールを禁止
-      document.body.style.position = 'fixed';
-      document.body.style.width = '100%';
-      document.body.style.top = `-${scrollPosition}px`;
-      document.body.style.overflow = 'hidden';
-    };
-
-    const handleInputBlur = () => {
-      // スクロール禁止を解除
-      document.body.style.position = '';
-      document.body.style.width = '';
-      document.body.style.top = '';
-      document.body.style.overflow = '';
-      // 元の位置にスクロール戻す
-      window.scrollTo(0, scrollPosition);
-    };
-
-    // input要素を検索してリスナーを追加
-    const inputElement = document.querySelector('input[type="text"]');
-    if (inputElement) {
-      inputElement.addEventListener('focus', handleInputFocus);
-      inputElement.addEventListener('blur', handleInputBlur);
-    }
-
-    return () => {
-      if (inputElement) {
-        inputElement.removeEventListener('focus', handleInputFocus);
-        inputElement.removeEventListener('blur', handleInputBlur);
-      }
-    };
-  }, []);
-
   return (
-    <div className="fixed inset-0 bg-gradient-to-br from-purple-50 to-white flex flex-col px-4 py-4 overflow-hidden">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-white px-4 py-4">
       {/* Header */}
       <div className="w-full max-w-2xl flex justify-between items-center mb-4 flex-shrink-0">
         <div className="text-sm font-black text-purple-900">
