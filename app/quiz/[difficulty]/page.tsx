@@ -252,10 +252,49 @@ function QuizContent({
     }, 2000);
   };
 
+  // キーボード表示時のスクロール位置ロック（iOS・Android対応）
+  useEffect(() => {
+    let scrollPosition = 0;
+
+    const handleInputFocus = () => {
+      // スクロール位置を保存
+      scrollPosition = window.scrollY || window.pageYOffset;
+      // スクロールを禁止
+      document.body.style.position = 'fixed';
+      document.body.style.width = '100%';
+      document.body.style.top = `-${scrollPosition}px`;
+      document.body.style.overflow = 'hidden';
+    };
+
+    const handleInputBlur = () => {
+      // スクロール禁止を解除
+      document.body.style.position = '';
+      document.body.style.width = '';
+      document.body.style.top = '';
+      document.body.style.overflow = '';
+      // 元の位置にスクロール戻す
+      window.scrollTo(0, scrollPosition);
+    };
+
+    // input要素を検索してリスナーを追加
+    const inputElement = document.querySelector('input[type="text"]');
+    if (inputElement) {
+      inputElement.addEventListener('focus', handleInputFocus);
+      inputElement.addEventListener('blur', handleInputBlur);
+    }
+
+    return () => {
+      if (inputElement) {
+        inputElement.removeEventListener('focus', handleInputFocus);
+        inputElement.removeEventListener('blur', handleInputBlur);
+      }
+    };
+  }, []);
+
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-white px-4 py-8">
+    <div className="fixed inset-0 bg-gradient-to-br from-purple-50 to-white flex flex-col px-4 py-4 overflow-hidden">
       {/* Header */}
-      <div className="w-full max-w-2xl flex justify-between items-center mb-8">
+      <div className="w-full max-w-2xl flex justify-between items-center mb-4 flex-shrink-0">
         <div className="text-sm font-black text-purple-900">
           {nickname}
         </div>
@@ -272,7 +311,7 @@ function QuizContent({
       </div>
 
       {/* Main game area */}
-      <div className="w-full max-w-2xl flex flex-col lg:flex-row gap-8 items-center">
+      <div className="flex-1 overflow-y-auto w-full max-w-2xl flex flex-col lg:flex-row gap-4 items-center justify-center">
         {/* Left: Monster display */}
         <motion.div
           initial={{ opacity: 0, scale: 0.8 }}
@@ -325,7 +364,7 @@ function QuizContent({
       </div>
 
       {/* Progress bar */}
-      <div className="w-full max-w-2xl mt-12">
+      <div className="w-full max-w-2xl flex-shrink-0 mt-2">
         <div className="w-full bg-purple-200 rounded-full h-2 overflow-hidden">
           <motion.div
             className="bg-gradient-to-r from-purple-600 to-purple-700 h-full"
