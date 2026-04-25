@@ -10,8 +10,11 @@ import { MonsterDisplay } from '@/app/components/monster-display';
 
 type QuizQuestion = {
   id: string;
+  type: string;
   kanji: string;
   reading: string;
+  correctAnswers: string[];
+  answerType: string;
   questionText: string;
   explanation: string;
 };
