@@ -57,7 +57,7 @@ export function DifficultySelector() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="w-full max-w-sm mb-6"
+          className="w-full max-w-sm mb-16"
         >
           <label className="block text-sm font-semibold text-white mb-2 drop-shadow-lg">
             ニックネーム
@@ -68,7 +68,7 @@ export function DifficultySelector() {
             onChange={(e) => setNickname(e.target.value.slice(0, 30))}
             placeholder="例：むらさき太郎"
             maxLength={30}
-            className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 transition text-black placeholder-gray-500"
+            className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 transition text-white font-bold placeholder-gray-300"
           />
           <p className="text-xs text-white drop-shadow-lg mt-1">{nickname.length} / 30</p>
         </motion.div>
@@ -78,28 +78,27 @@ export function DifficultySelector() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="w-full max-w-lg mb-8"
+          className="w-full max-w-2xl mb-8"
         >
-          <label className="block text-sm font-semibold text-white mb-4 drop-shadow-lg">
-            難易度を選択
-          </label>
           <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
             {difficulties.map((difficulty, index) => {
               const isUnlocked = isDifficultyUnlocked(difficulty);
+              const isLastDifficulty = index === difficulties.length - 1;
+
               return (
                 <motion.div
                   key={difficulty}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                  className="relative"
+                  className={`relative ${isLastDifficulty ? 'col-span-2 sm:col-span-1 flex justify-center sm:justify-auto' : ''}`}
                 >
                   <motion.button
                     whileHover={isUnlocked ? { scale: 1.05 } : {}}
                     whileTap={isUnlocked ? { scale: 0.95 } : {}}
                     onClick={() => isUnlocked && setSelectedDifficulty(difficulty)}
                     disabled={!isUnlocked}
-                    className={`w-full py-3 px-2 rounded-lg font-bold text-sm sm:text-base transition-all ${
+                    className={`w-full sm:w-auto py-4 px-4 rounded-lg font-bold text-lg sm:text-xl transition-all ${
                       !isUnlocked
                         ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
                         : selectedDifficulty === difficulty
