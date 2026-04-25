@@ -48,9 +48,9 @@ export function DifficultySelector() {
       {/* 背景オーバーレイ */}
       <div className="absolute inset-0 bg-black/20 z-0"></div>
 
-      <div className="relative z-10 w-full flex flex-col items-center justify-start pt-4 min-h-screen">
+      <div className="relative z-10 w-full flex flex-col items-center justify-start min-h-screen">
         {/* スペーサー - コンテンツを下に配置 */}
-        <div className="flex-[2]"></div>
+        <div className="flex-[3]"></div>
 
         {/* ニックネーム入力 */}
         <motion.div
