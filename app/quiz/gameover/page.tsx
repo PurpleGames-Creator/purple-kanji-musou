@@ -2,8 +2,9 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { Suspense } from 'react';
 
-export default function GameOverPage() {
+function GameOverContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -89,5 +90,19 @@ export default function GameOverPage() {
         </motion.button>
       </div>
     </div>
+  );
+}
+
+export default function GameOverPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <div className="text-white">読込み中...</div>
+        </div>
+      }
+    >
+      <GameOverContent />
+    </Suspense>
   );
 }
