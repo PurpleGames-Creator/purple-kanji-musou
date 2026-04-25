@@ -50,7 +50,7 @@ const config: Config = {
     },
   },
   plugins: [
-    function ({ addUtilities }) {
+    function ({ addUtilities }: any) {
       addUtilities({
         '.text-stroke-1': {
           WebkitTextStroke: '1px currentColor',
