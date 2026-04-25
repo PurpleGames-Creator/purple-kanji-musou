@@ -17,6 +17,24 @@ type QuizQuestionProps = {
   maxSkips?: number;
 };
 
+// Helper function to render fullSentence with the kanji part underlined
+function renderFullSentenceWithUnderline(fullSentence: string, kanji: string) {
+  // Find the kanji part in the full sentence and split it
+  const parts = fullSentence.split(new RegExp(`(${kanji.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`));
+
+  return parts.map((part, index) => {
+    // If this part matches the kanji, wrap it with underline styling
+    if (part === kanji) {
+      return (
+        <span key={index} className="border-b-4 border-purple-400 font-bold">
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+}
+
 export function QuizQuestion({
   sentence,
   fullSentence,
@@ -86,9 +104,9 @@ export function QuizQuestion({
           {sentenceParts[1]}
         </p>
 
-        {/* 完全文（ヒント・参考用） */}
-        <p className="text-lg text-gray-600 font-semibold">
-          例: {fullSentence}
+        {/* 完全文（ヒント・参考用）- 答えるべき部分に下線を引く */}
+        <p className="text-lg text-gray-700 font-semibold">
+          例: {renderFullSentenceWithUnderline(fullSentence, kanji)}
         </p>
       </motion.div>
 
