@@ -5,6 +5,7 @@ import { useSearchParams, useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { getDifficultyLabel } from '@/lib/kanji-difficulty';
 import { calculateAccuracy } from '@/lib/quiz-logic';
+import { ScoreDisplay } from '@/app/components/score-display';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
@@ -129,28 +130,11 @@ function ResultContent() {
           </motion.div>
         </div>
 
-        {/* Score details */}
-        <div className="space-y-4">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 font-semibold">正解数</span>
-            <span className="text-2xl font-bold text-purple-600">
-              {correct} / {total}
-            </span>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 font-semibold">正答率</span>
-            <span className="text-2xl font-bold text-purple-600">
-              {accuracy.toFixed(1)}%
-            </span>
-          </div>
-
-          <div className="flex justify-between items-center">
-            <span className="text-gray-700 font-semibold">クリア時間</span>
-            <span className="text-2xl font-bold text-purple-600">
-              {time.toFixed(1)}秒
-            </span>
-          </div>
+        {/* Score details with animations */}
+        <div className="grid grid-cols-3 gap-4">
+          <ScoreDisplay value={correct} label="正解数" delay={0.5} suffix={` / ${total}`} />
+          <ScoreDisplay value={accuracy} label="正答率" delay={0.7} suffix="%" />
+          <ScoreDisplay value={Math.round(time)} label="クリア時間" delay={0.9} suffix="秒" />
         </div>
       </motion.div>
 
