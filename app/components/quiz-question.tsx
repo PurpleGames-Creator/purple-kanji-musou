@@ -77,12 +77,18 @@ export function QuizQuestion({
         transition={{ duration: 0.4, type: 'spring' }}
         className="text-center"
       >
-        <p className="text-3xl sm:text-4xl font-black text-purple-900 leading-relaxed">
+        {/* 問題文（穴埋め） */}
+        <p className="text-3xl sm:text-4xl font-black text-purple-900 leading-relaxed mb-4">
           {sentenceParts[0]}
           <span className="inline-block border-b-4 border-purple-600 px-1 min-w-[60px]">
             {isAnswered ? kanji : ''}
           </span>
           {sentenceParts[1]}
+        </p>
+
+        {/* 完全文（ヒント・参考用） */}
+        <p className="text-lg text-gray-600 font-semibold">
+          例: {fullSentence}
         </p>
       </motion.div>
 
