@@ -1,0 +1,291 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { Suspense } from 'react';
+import { motion } from 'framer-motion';
+import { QuizQuestion } from '@/app/components/quiz-question';
+import { QuizTimer } from '@/app/components/quiz-timer';
+import { MonsterDisplay } from '@/app/components/monster-display';
+
+type QuizQuestion = {
+  id: string;
+  kanji: string;
+  reading: string;
+  questionText: string;
+  explanation: string;
+};
+
+function QuizContent({
+  difficulty,
+  nickname,
+}: {
+  difficulty: string;
+  nickname: string;
+}) {
+  const router = useRouter();
+
+  const [questions, setQuestions] = useState<QuizQuestion[]>([]);
+  const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
+  const [isAnswered, setIsAnswered] = useState(false);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [startTime] = useState(Date.now());
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // Fetch questions on mount
+  useEffect(() => {
+    const fetchQuestions = async () => {
+      try {
+        const res = await fetch(
+          `/api/quiz/questions/${encodeURIComponent(difficulty)}`
+        );
+        if (!res.ok) throw new Error('Failed to fetch questions');
+        const data = await res.json();
+        setQuestions(data.questions);
+        setIsLoading(false);
+      } catch (err) {
+        setError(
+          err instanceof Error ? err.message : 'Unknown error occurred'
+        );
+        setIsLoading(false);
+      }
+    };
+
+    fetchQuestions();
+  }, [difficulty]);
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+          className="w-12 h-12 border-4 border-purple-300 border-t-purple-600 rounded-full"
+        />
+      </div>
+    );
+  }
+
+  if (error || questions.length === 0) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-600 font-bold mb-4">
+            {error || 'Failed to load questions'}
+          </p>
+          <button
+            onClick={() => router.back()}
+            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          >
+            戻る
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  const currentQuestion = questions[currentQuestionIndex];
+  const isLastQuestion = currentQuestionIndex === questions.length - 1;
+
+  const handleAnswer = async (answer: string) => {
+    setIsAnswered(true);
+
+    // Validate answer
+    try {
+      const res = await fetch('/api/quiz/validate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userInput: answer,
+          correctAnswer: currentQuestion.reading,
+        }),
+      });
+
+      const data = await res.json();
+      if (data.isCorrect) {
+        setCorrectCount((prev) => prev + 1);
+      }
+    } catch (err) {
+      console.error('Validation error:', err);
+    }
+
+    // Auto-advance to next question after 1.5 seconds
+    setTimeout(() => {
+      if (isLastQuestion) {
+        const clearTimeSeconds = (Date.now() - startTime) / 1000;
+        router.push(
+          `/quiz/result?` +
+            `difficulty=${encodeURIComponent(difficulty)}&` +
+            `nickname=${encodeURIComponent(nickname)}&` +
+            `correct=${correctCount + (currentQuestion ? 1 : 0)}&` +
+            `total=15&` +
+            `time=${clearTimeSeconds.toFixed(1)}`
+        );
+      } else {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        setIsAnswered(false);
+      }
+    }, 1500);
+  };
+
+  const handleSkip = () => {
+    setIsAnswered(true);
+    setTimeout(() => {
+      if (isLastQuestion) {
+        const clearTimeSeconds = (Date.now() - startTime) / 1000;
+        router.push(
+          `/quiz/result?` +
+            `difficulty=${encodeURIComponent(difficulty)}&` +
+            `nickname=${encodeURIComponent(nickname)}&` +
+            `correct=${correctCount}&` +
+            `total=15&` +
+            `time=${clearTimeSeconds.toFixed(1)}`
+        );
+      } else {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        setIsAnswered(false);
+      }
+    }, 1500);
+  };
+
+  const handleTimeUp = () => {
+    setIsAnswered(true);
+    setTimeout(() => {
+      if (isLastQuestion) {
+        const clearTimeSeconds = (Date.now() - startTime) / 1000;
+        router.push(
+          `/quiz/result?` +
+            `difficulty=${encodeURIComponent(difficulty)}&` +
+            `nickname=${encodeURIComponent(nickname)}&` +
+            `correct=${correctCount}&` +
+            `total=15&` +
+            `time=${clearTimeSeconds.toFixed(1)}`
+        );
+      } else {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        setIsAnswered(false);
+      }
+    }, 1500);
+  };
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-white px-4 py-8">
+      {/* Header */}
+      <div className="w-full max-w-2xl flex justify-between items-center mb-8">
+        <div className="text-sm font-semibold text-purple-900">
+          {nickname}
+        </div>
+        <div className="text-sm font-semibold text-purple-600">
+          {currentQuestionIndex + 1} / 15
+        </div>
+      </div>
+
+      {/* Main game area */}
+      <div className="w-full max-w-2xl flex flex-col lg:flex-row gap-8 items-center">
+        {/* Left: Monster display */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          className="flex-1 flex flex-col items-center"
+        >
+          <MonsterDisplay questionNumber={currentQuestionIndex + 1} />
+        </motion.div>
+
+        {/* Right: Quiz area */}
+        <div className="flex-1 flex flex-col items-center gap-6">
+          {/* Timer */}
+          {!isAnswered && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <QuizTimer initialSeconds={15} onTimeUp={handleTimeUp} />
+            </motion.div>
+          )}
+
+          {/* Question and input */}
+          <QuizQuestion
+            kanji={currentQuestion.kanji}
+            questionText={currentQuestion.questionText}
+            onAnswer={handleAnswer}
+            onSkip={handleSkip}
+            isAnswered={isAnswered}
+          />
+
+          {/* Feedback message */}
+          {isAnswered && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-center"
+            >
+              <p className="text-sm text-purple-700 font-semibold mb-2">
+                読み方: <span className="text-lg">{currentQuestion.reading}</span>
+              </p>
+              <p className="text-xs text-gray-600">{currentQuestion.explanation}</p>
+            </motion.div>
+          )}
+        </div>
+      </div>
+
+      {/* Progress bar */}
+      <div className="w-full max-w-2xl mt-12">
+        <div className="w-full bg-purple-200 rounded-full h-2 overflow-hidden">
+          <motion.div
+            className="bg-gradient-to-r from-purple-600 to-purple-700 h-full"
+            initial={{ width: 0 }}
+            animate={{
+              width: `${((currentQuestionIndex + 1) / 15) * 100}%`,
+            }}
+            transition={{ duration: 0.3 }}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default function QuizPage({
+  params,
+}: {
+  params: Promise<{ difficulty: string }>;
+}) {
+  const [difficulty, setDifficulty] = useState<string>('');
+  const searchParams = useSearchParams();
+  const nickname = searchParams.get('nickname') || 'Player';
+
+  useEffect(() => {
+    params.then((p) => setDifficulty(p.difficulty));
+  }, [params]);
+
+  if (!difficulty) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <motion.div
+          animate={{ rotate: 360 }}
+          transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+          className="w-12 h-12 border-4 border-purple-300 border-t-purple-600 rounded-full"
+        />
+      </div>
+    );
+  }
+
+  return (
+    <Suspense
+      fallback={
+        <div className="flex items-center justify-center min-h-screen">
+          <motion.div
+            animate={{ rotate: 360 }}
+            transition={{ duration: 2, repeat: Infinity, ease: 'linear' }}
+            className="w-12 h-12 border-4 border-purple-300 border-t-purple-600 rounded-full"
+          />
+        </div>
+      }
+    >
+      <QuizContent difficulty={difficulty} nickname={nickname} />
+    </Suspense>
+  );
+}

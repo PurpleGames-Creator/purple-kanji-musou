@@ -45,8 +45,16 @@ export function MonsterDisplay({ questionNumber }: MonsterDisplayProps) {
       {/* モンスター本体（プレースホルダー） */}
       <motion.div
         initial={{ opacity: 0, scale: 0.5 }}
-        animate={{ opacity: 1, scale: config.scale }}
-        transition={{ duration: 0.5 }}
+        animate={{
+          opacity: 1,
+          scale: stage === 4 ? [config.scale, config.scale * 1.1, config.scale] : config.scale,
+          rotate: stage === 4 ? [0, 5, -5, 0] : 0,
+        }}
+        transition={{
+          duration: stage === 4 ? 1 : 0.5,
+          repeat: stage === 4 ? Infinity : 0,
+          ease: 'easeInOut',
+        }}
         className={`flex items-center justify-center w-32 h-32 rounded-full ${
           stage === 4
             ? 'bg-gradient-to-br from-red-400 to-red-600'
@@ -56,15 +64,6 @@ export function MonsterDisplay({ questionNumber }: MonsterDisplayProps) {
                 ? 'bg-gradient-to-br from-purple-400 to-purple-600'
                 : 'bg-gradient-to-br from-purple-300 to-purple-400'
         } ${config.glow} ${config.color}`}
-        animate={{
-          scale: stage === 4 ? [config.scale, config.scale * 1.1, config.scale] : config.scale,
-          rotate: stage === 4 ? [0, 5, -5, 0] : 0,
-        }}
-        transition={{
-          duration: stage === 4 ? 1 : 3,
-          repeat: Infinity,
-          ease: 'easeInOut',
-        }}
       >
         <div className="text-5xl">👹</div>
       </motion.div>
