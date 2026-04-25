@@ -1,7 +1,6 @@
 /**
  * ユーザー入力が正解かどうかを判定
- * 新形式対応：correctAnswers に複数の正解形式（ひらがな・漢字）を含む
- * 例：["すわる", "座る"]
+ * 仕様：答えはひらがなのみ（漢字が含まれていたら不正解）
  * 送り仮名対応：「すわる」の場合「すわ」でも正解
  */
 export function validateAnswer(
@@ -10,11 +9,19 @@ export function validateAnswer(
 ): boolean {
   const normalized = userInput.trim();
 
+  // 漢字が含まれていたら不正解
+  if (hasKanji(normalized)) {
+    return false;
+  }
+
   // 複数の正解に対応
   const answerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
 
+  // ひらがナンバージョンのみを抽出（correctAnswersの1番目がひらがな）
+  const hiraganaAnswers = answerList.filter(a => isHiragana(a.trim()));
+
   // 完全一致判定
-  for (const correctAnswer of answerList) {
+  for (const correctAnswer of hiraganaAnswers) {
     if (normalized === correctAnswer.trim()) {
       return true;
     }
@@ -24,17 +31,14 @@ export function validateAnswer(
   // 例：「すわる」→「る」を除いた「すわ」も正解
   const okuriPatterns = ['る', 'い', 'た', 'ない', 'たい', 'ている', 'られる', 'せる', 'させる', 'めく'];
 
-  for (const correctAnswer of answerList) {
+  for (const correctAnswer of hiraganaAnswers) {
     const trimmed = correctAnswer.trim();
 
-    // ひらがなの場合のみ送り仮名チェック
-    if (isHiragana(trimmed)) {
-      for (const okuri of okuriPatterns) {
-        if (trimmed.endsWith(okuri)) {
-          const withoutOkuri = trimmed.slice(0, -okuri.length);
-          if (normalized === withoutOkuri && withoutOkuri.length > 0) {
-            return true;
-          }
+    for (const okuri of okuriPatterns) {
+      if (trimmed.endsWith(okuri)) {
+        const withoutOkuri = trimmed.slice(0, -okuri.length);
+        if (normalized === withoutOkuri && withoutOkuri.length > 0) {
+          return true;
         }
       }
     }
@@ -48,6 +52,13 @@ export function validateAnswer(
  */
 function isHiragana(str: string): boolean {
   return /^[ぁ-ん゙ ゚]+$/.test(str);
+}
+
+/**
+ * 文字列に漢字が含まれているかどうかを判定
+ */
+function hasKanji(str: string): boolean {
+  return /[\u4e00-\u9fff]/.test(str);
 }
 
 /**
