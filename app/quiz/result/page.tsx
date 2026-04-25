@@ -106,7 +106,7 @@ function ResultContent() {
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, delay: 0.2 }}
-        className="text-4xl font-bold text-purple-900 mb-2 text-center"
+        className="text-4xl font-black text-purple-900 mb-2 text-center text-stroke-1"
       >
         クリア！
       </motion.h1>
@@ -130,7 +130,7 @@ function ResultContent() {
         {/* Difficulty */}
         <div className="text-center mb-6">
           <p className="text-sm text-gray-600 mb-1">難易度</p>
-          <p className="text-2xl font-bold text-purple-600">
+          <p className="text-2xl font-black text-purple-600">
             {getDifficultyLabel(difficulty as any)}
           </p>
         </div>
@@ -140,7 +140,7 @@ function ResultContent() {
           <motion.div
             animate={{ scale: [1, 1.1, 1] }}
             transition={{ duration: 0.6, repeat: Infinity }}
-            className={`text-7xl font-bold ${grade.color}`}
+            className={`text-7xl font-black ${grade.color}`}
           >
             {grade.label}
           </motion.div>

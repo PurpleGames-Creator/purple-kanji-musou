@@ -71,10 +71,10 @@ function RankingsContent() {
         transition={{ duration: 0.6 }}
         className="max-w-4xl mx-auto mb-8"
       >
-        <h1 className="text-4xl font-bold text-purple-900 mb-2 text-center">
+        <h1 className="text-4xl font-black text-purple-900 mb-2 text-center text-stroke-1">
           ランキング
         </h1>
-        <p className="text-lg text-purple-700 text-center">
+        <p className="text-lg text-purple-700 text-center font-black">
           {getDifficultyLabel(difficulty as any)}
         </p>
       </motion.div>
@@ -90,7 +90,7 @@ function RankingsContent() {
           <button
             key={p}
             onClick={() => setPeriod(p)}
-            className={`px-6 py-2 rounded-lg font-semibold transition-all ${
+            className={`px-6 py-2 rounded-lg font-black transition-all ${
               period === p
                 ? 'bg-purple-600 text-white shadow-lg'
                 : 'bg-purple-100 text-purple-900 hover:bg-purple-200'
@@ -131,11 +131,11 @@ function RankingsContent() {
             <table className="w-full">
               <thead className="bg-purple-600 text-white">
                 <tr>
-                  <th className="px-4 py-3 text-left">順位</th>
-                  <th className="px-4 py-3 text-left">プレイヤー</th>
-                  <th className="px-4 py-3 text-center">正解数</th>
-                  <th className="px-4 py-3 text-center">正答率</th>
-                  <th className="px-4 py-3 text-center">クリア時間</th>
+                  <th className="px-4 py-3 text-left font-black">順位</th>
+                  <th className="px-4 py-3 text-left font-black">プレイヤー</th>
+                  <th className="px-4 py-3 text-center font-black">正解数</th>
+                  <th className="px-4 py-3 text-center font-black">正答率</th>
+                  <th className="px-4 py-3 text-center font-black">クリア時間</th>
                 </tr>
               </thead>
               <tbody>
@@ -147,18 +147,18 @@ function RankingsContent() {
                     transition={{ duration: 0.3, delay: index * 0.05 }}
                     className="border-b hover:bg-purple-50 transition"
                   >
-                    <td className="px-4 py-3 font-bold text-lg">
+                    <td className="px-4 py-3 font-black text-lg">
                       <span className="mr-2">{getMedalEmoji(entry.rank)}</span>
                       {entry.rank}
                     </td>
-                    <td className="px-4 py-3 font-semibold text-purple-900">
+                    <td className="px-4 py-3 font-black text-purple-900">
                       {entry.nickname}
                     </td>
-                    <td className="px-4 py-3 text-center font-bold text-purple-600">
+                    <td className="px-4 py-3 text-center font-black text-purple-600">
                       {entry.questions_correct} / {entry.questions_total}
                     </td>
                     <td
-                      className={`px-4 py-3 text-center font-bold ${getAccuracyColor(
+                      className={`px-4 py-3 text-center font-black ${getAccuracyColor(
                         entry.accuracy
                       )}`}
                     >

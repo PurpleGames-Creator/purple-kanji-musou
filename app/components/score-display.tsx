@@ -47,12 +47,12 @@ export function ScoreDisplay({
       transition={{ duration: 0.5, delay }}
       className="flex flex-col items-center"
     >
-      <p className="text-sm text-gray-600 mb-2">{label}</p>
+      <p className="text-sm text-gray-600 mb-2 font-black">{label}</p>
       <motion.p
         key={displayValue}
         animate={{ scale: [1, 1.1, 1] }}
         transition={{ duration: 0.3 }}
-        className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-purple-400"
+        className="text-5xl font-black text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-purple-400"
       >
         {displayValue}
         {suffix}

@@ -45,7 +45,7 @@ export function QuizQuestion({
         initial={{ scale: 0, rotate: -20 }}
         animate={{ scale: 1, rotate: 0 }}
         transition={{ duration: 0.5, type: 'spring', stiffness: 100 }}
-        className="text-7xl sm:text-8xl font-bold text-purple-700"
+        className="text-7xl sm:text-8xl font-black text-purple-700 text-stroke-1.5"
       >
         {kanji}
       </motion.div>
@@ -82,7 +82,7 @@ export function QuizQuestion({
             whileTap={{ scale: 0.95 }}
             type="submit"
             disabled={isAnswered || !input.trim()}
-            className="flex-1 py-3 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+            className="flex-1 py-3 bg-purple-600 text-white font-black rounded-lg hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
           >
             答える
           </motion.button>
@@ -94,7 +94,7 @@ export function QuizQuestion({
               type="button"
               onClick={onSkip}
               disabled={isAnswered}
-              className="flex-1 py-3 bg-gray-400 text-white font-bold rounded-lg hover:bg-gray-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
+              className="flex-1 py-3 bg-gray-400 text-white font-black rounded-lg hover:bg-gray-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
             >
               スキップ
             </motion.button>

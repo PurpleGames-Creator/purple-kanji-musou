@@ -173,10 +173,10 @@ function QuizContent({
     <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-white px-4 py-8">
       {/* Header */}
       <div className="w-full max-w-2xl flex justify-between items-center mb-8">
-        <div className="text-sm font-semibold text-purple-900">
+        <div className="text-sm font-black text-purple-900">
           {nickname}
         </div>
-        <div className="text-sm font-semibold text-purple-600">
+        <div className="text-sm font-black text-purple-600">
           {currentQuestionIndex + 1} / 15
         </div>
       </div>

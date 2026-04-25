@@ -7,7 +7,7 @@ const config: Config = {
   theme: {
     extend: {
       fontFamily: {
-        serif: ['Noto Serif JP', 'serif'],
+        sans: ['Noto Sans JP', 'sans-serif'],
       },
       colors: {
         // Purple 基調カスタムカラー
@@ -39,9 +39,28 @@ const config: Config = {
           '50%': { transform: 'scale(1.05)' },
         },
       },
+      textStroke: {
+        '1px': {
+          WebkitTextStroke: '1px currentColor',
+        },
+        '1.5px': {
+          WebkitTextStroke: '1.5px currentColor',
+        },
+      },
     },
   },
-  plugins: [],
+  plugins: [
+    function ({ addUtilities }) {
+      addUtilities({
+        '.text-stroke-1': {
+          WebkitTextStroke: '1px currentColor',
+        },
+        '.text-stroke-1.5': {
+          WebkitTextStroke: '1.5px currentColor',
+        },
+      });
+    },
+  ],
 };
 
 export default config;

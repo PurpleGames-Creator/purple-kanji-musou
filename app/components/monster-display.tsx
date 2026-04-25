@@ -123,7 +123,7 @@ export function MonsterDisplay({ questionNumber }: MonsterDisplayProps) {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.3 }}
-        className={`text-center font-bold ${config.color}`}
+        className={`text-center font-black ${config.color}`}
       >
         <motion.p
           animate={{ scale: stage === 4 ? [1, 1.1, 1] : 1 }}
@@ -135,7 +135,7 @@ export function MonsterDisplay({ questionNumber }: MonsterDisplayProps) {
         >
           問題 {questionNumber}/15
         </motion.p>
-        <p className="text-lg">{config.label}</p>
+        <p className="text-lg font-black">{config.label}</p>
       </motion.div>
     </div>
   );

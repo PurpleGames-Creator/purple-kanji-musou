@@ -46,7 +46,7 @@ export function DifficultySelector() {
         transition={{ duration: 0.6 }}
         className="text-4xl sm:text-5xl font-bold text-purple-900 mb-2 text-center"
       >
-        <span>Purple</span><span className="font-serif">漢字無双</span>
+        <span>Purple</span><span className="font-black text-stroke-1.5">漢字無双</span>
       </motion.h1>
 
       <motion.p
@@ -105,7 +105,7 @@ export function DifficultySelector() {
                   whileTap={isUnlocked ? { scale: 0.95 } : {}}
                   onClick={() => isUnlocked && setSelectedDifficulty(difficulty)}
                   disabled={!isUnlocked}
-                  className={`w-full py-4 px-3 rounded-lg font-bold text-lg transition-all ${
+                  className={`w-full py-4 px-3 rounded-lg font-black text-lg transition-all ${
                     !isUnlocked
                       ? 'bg-gray-300 text-gray-500 cursor-not-allowed opacity-50'
                       : selectedDifficulty === difficulty

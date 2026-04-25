@@ -29,7 +29,7 @@ export function QuizTimer({ initialSeconds, onTimeUp }: TimerProps) {
 
   return (
     <motion.div
-      className={`flex items-center justify-center w-24 h-24 rounded-full font-bold text-4xl transition-colors ${
+      className={`flex items-center justify-center w-24 h-24 rounded-full font-black text-4xl transition-colors ${
         isWarning
           ? 'bg-red-100 text-red-600'
           : 'bg-purple-100 text-purple-600'

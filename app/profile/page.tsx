@@ -78,10 +78,10 @@ function ProfileContent() {
         transition={{ duration: 0.6 }}
         className="max-w-4xl mx-auto mb-8"
       >
-        <h1 className="text-4xl font-bold text-purple-900 mb-2 text-center">
+        <h1 className="text-4xl font-black text-purple-900 mb-2 text-center text-stroke-1">
           {profile?.nickname}さんの成績
         </h1>
-        <p className="text-lg text-purple-700 text-center">
+        <p className="text-lg text-purple-700 text-center font-black">
           総合成績ダッシュボード
         </p>
       </motion.div>
@@ -118,16 +118,16 @@ function ProfileContent() {
             className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-4 mb-8"
           >
             <div className="bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-lg shadow-lg p-6">
-              <p className="text-sm opacity-90 mb-1">総プレイ回数</p>
-              <p className="text-4xl font-bold">{profile.totalAttempts}</p>
+              <p className="text-sm opacity-90 mb-1 font-black">総プレイ回数</p>
+              <p className="text-4xl font-black">{profile.totalAttempts}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-500 to-purple-600 text-white rounded-lg shadow-lg p-6">
-              <p className="text-sm opacity-90 mb-1">総正解数</p>
-              <p className="text-4xl font-bold">{profile.totalCorrect}</p>
+              <p className="text-sm opacity-90 mb-1 font-black">総正解数</p>
+              <p className="text-4xl font-black">{profile.totalCorrect}</p>
             </div>
             <div className="bg-gradient-to-br from-purple-400 to-purple-500 text-white rounded-lg shadow-lg p-6">
-              <p className="text-sm opacity-90 mb-1">総合正答率</p>
-              <p className="text-4xl font-bold">{profile.overallAccuracy}%</p>
+              <p className="text-sm opacity-90 mb-1 font-black">総合正答率</p>
+              <p className="text-4xl font-black">{profile.overallAccuracy}%</p>
             </div>
           </motion.div>
 
@@ -138,7 +138,7 @@ function ProfileContent() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6"
           >
-            <h2 className="text-2xl font-bold text-purple-900 mb-6">
+            <h2 className="text-2xl font-black text-purple-900 mb-6">
               難易度別成績
             </h2>
             <div className="space-y-4">
@@ -154,23 +154,23 @@ function ProfileContent() {
                     className="border-b pb-4 last:border-b-0"
                   >
                     <div className="flex items-center justify-between mb-3">
-                      <h3 className="text-lg font-bold text-purple-900">
+                      <h3 className="text-lg font-black text-purple-900">
                         {getDifficultyLabel(stat.difficulty as any)}
                       </h3>
-                      <span className="text-sm font-semibold text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
+                      <span className="text-sm font-black text-purple-600 bg-purple-100 px-3 py-1 rounded-full">
                         {stat.attempts}回
                       </span>
                     </div>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                       <div>
                         <p className="text-xs text-gray-600 mb-1">正解数</p>
-                        <p className="text-2xl font-bold text-purple-600">
+                        <p className="text-2xl font-black text-purple-600">
                           {stat.totalCorrect}
                         </p>
                       </div>
                       <div>
                         <p className="text-xs text-gray-600 mb-1">正答率</p>
-                        <p className="text-2xl font-bold text-purple-600">
+                        <p className="text-2xl font-black text-purple-600">
                           {stat.accuracy}%
                         </p>
                       </div>
@@ -178,7 +178,7 @@ function ProfileContent() {
                         <p className="text-xs text-gray-600 mb-1">
                           ベスト時間
                         </p>
-                        <p className="text-2xl font-bold text-purple-600">
+                        <p className="text-2xl font-black text-purple-600">
                           {stat.bestTime
                             ? stat.bestTime.toFixed(1)
                             : '-'}秒
@@ -186,7 +186,7 @@ function ProfileContent() {
                       </div>
                       <div>
                         <p className="text-xs text-gray-600 mb-1">平均時間</p>
-                        <p className="text-2xl font-bold text-purple-600">
+                        <p className="text-2xl font-black text-purple-600">
                           {stat.averageTime
                             ? stat.averageTime.toFixed(1)
                             : '-'}秒
@@ -195,7 +195,7 @@ function ProfileContent() {
                     </div>
                     <Link
                       href={`/rankings/${encodeURIComponent(stat.difficulty)}`}
-                      className="mt-3 text-sm text-purple-600 hover:text-purple-700 font-semibold inline-block"
+                      className="mt-3 text-sm text-purple-600 hover:text-purple-700 font-black inline-block"
                     >
                       ランキングを見る →
                     </Link>
@@ -214,7 +214,7 @@ function ProfileContent() {
           >
             <Link
               href="/"
-              className="inline-block px-8 py-3 bg-purple-600 text-white font-bold rounded-lg hover:bg-purple-700 transition-all shadow-lg"
+              className="inline-block px-8 py-3 bg-purple-600 text-white font-black rounded-lg hover:bg-purple-700 transition-all shadow-lg"
             >
               ホームに戻る
             </Link>
