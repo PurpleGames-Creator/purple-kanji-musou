@@ -50,7 +50,7 @@ export function DifficultySelector() {
 
       <div className="relative z-10 w-full flex flex-col items-center justify-start min-h-screen">
         {/* スペーサー - コンテンツを下に配置 */}
-        <div className="flex-[3]"></div>
+        <div className="flex-[4.5]"></div>
 
         {/* ニックネーム入力 */}
         <motion.div
