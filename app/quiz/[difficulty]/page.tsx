@@ -10,13 +10,14 @@ import { MonsterDisplay } from '@/app/components/monster-display';
 
 type QuizQuestion = {
   id: string;
-  type: string;
+  difficulty: string;
+  sentence: string;
+  fullSentence: string;
   kanji: string;
   reading: string;
   correctAnswers: string[];
-  answerType: string;
-  questionText: string;
   explanation: string;
+  type: string;
 };
 
 function QuizContent({
@@ -31,6 +32,7 @@ function QuizContent({
   const [questions, setQuestions] = useState<QuizQuestion[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isAnswered, setIsAnswered] = useState(false);
+  const [isCorrect, setIsCorrect] = useState(false);
   const [correctCount, setCorrectCount] = useState(0);
   const [startTime] = useState(Date.now());
   const [isLoading, setIsLoading] = useState(true);
@@ -97,7 +99,7 @@ function QuizContent({
   const handleAnswer = async (answer: string) => {
     setIsAnswered(true);
 
-    let isCorrect = false;
+    let correct = false;
 
     // Validate answer
     try {
@@ -107,18 +109,19 @@ function QuizContent({
         body: JSON.stringify({
           userInput: answer,
           correctAnswers: currentQuestion.correctAnswers,
-          answerType: currentQuestion.answerType,
         }),
       });
 
       const data = await res.json();
       if (data.isCorrect) {
         setCorrectCount((prev) => prev + 1);
-        isCorrect = true;
+        correct = true;
+        setIsCorrect(true);
       } else {
         // 間違い時はライフ -1
         const newLife = life - 1;
         setLife(newLife);
+        setIsCorrect(false);
 
         // ライフが0になったらゲームオーバー
         if (newLife <= 0) {
@@ -133,7 +136,7 @@ function QuizContent({
                 `questionNumber=${currentQuestionIndex + 1}&` +
                 `time=${clearTimeSeconds.toFixed(1)}`
             );
-          }, 1500);
+          }, 2000);
           return;
         }
       }
@@ -141,9 +144,9 @@ function QuizContent({
       console.error('Validation error:', err);
     }
 
-    // Auto-advance to next question after 1.5 seconds
+    // Auto-advance to next question after 2 seconds (wait for feedback animation)
     setTimeout(() => {
-      if (isLastQuestion && isCorrect) {
+      if (isLastQuestion && correct) {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
         router.push(
           `/quiz/result?` +
@@ -153,17 +156,19 @@ function QuizContent({
             `total=15&` +
             `time=${clearTimeSeconds.toFixed(1)}`
         );
-      } else if (!isLastQuestion || isCorrect) {
+      } else if (!isLastQuestion || correct) {
         setCurrentQuestionIndex((prev) => prev + 1);
         setIsAnswered(false);
+        setIsCorrect(false);
       }
-    }, 1500);
+    }, 2000);
   };
 
   const handleSkip = () => {
     if (skipCount >= maxSkips) return;
     setSkipCount((prev) => prev + 1);
     setIsAnswered(true);
+    setIsCorrect(false);
     setTimeout(() => {
       if (isLastQuestion) {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
@@ -178,12 +183,33 @@ function QuizContent({
       } else {
         setCurrentQuestionIndex((prev) => prev + 1);
         setIsAnswered(false);
+        setIsCorrect(false);
       }
-    }, 1500);
+    }, 2000);
   };
 
   const handleTimeUp = () => {
     setIsAnswered(true);
+    setIsCorrect(false);
+    const newLife = life - 1;
+    setLife(newLife);
+
+    if (newLife <= 0) {
+      setTimeout(() => {
+        const clearTimeSeconds = (Date.now() - startTime) / 1000;
+        router.push(
+          `/quiz/gameover?` +
+            `difficulty=${encodeURIComponent(difficulty)}&` +
+            `nickname=${encodeURIComponent(nickname)}&` +
+            `correct=${correctCount}&` +
+            `incorrect=${currentQuestionIndex - correctCount + 1}&` +
+            `questionNumber=${currentQuestionIndex + 1}&` +
+            `time=${clearTimeSeconds.toFixed(1)}`
+        );
+      }, 2000);
+      return;
+    }
+
     setTimeout(() => {
       if (isLastQuestion) {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
@@ -198,8 +224,9 @@ function QuizContent({
       } else {
         setCurrentQuestionIndex((prev) => prev + 1);
         setIsAnswered(false);
+        setIsCorrect(false);
       }
-    }, 1500);
+    }, 2000);
   };
 
   return (
@@ -248,26 +275,27 @@ function QuizContent({
 
           {/* Question and input */}
           <QuizQuestion
+            sentence={currentQuestion.sentence}
+            fullSentence={currentQuestion.fullSentence}
             kanji={currentQuestion.kanji}
-            questionText={currentQuestion.questionText}
+            reading={currentQuestion.reading}
             onAnswer={handleAnswer}
             onSkip={handleSkip}
             isAnswered={isAnswered}
+            isCorrect={isCorrect}
             skipCount={skipCount}
             maxSkips={maxSkips}
           />
 
-          {/* Feedback message */}
+          {/* Explanation after answering */}
           {isAnswered && (
             <motion.div
-              initial={{ opacity: 0, y: -10 }}
+              initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.5 }}
               className="text-center"
             >
-              <p className="text-sm text-purple-700 font-semibold mb-2">
-                読み方: <span className="text-lg">{currentQuestion.reading}</span>
-              </p>
-              <p className="text-xs text-gray-600">{currentQuestion.explanation}</p>
+              <p className="text-sm text-gray-600">{currentQuestion.explanation}</p>
             </motion.div>
           )}
         </div>

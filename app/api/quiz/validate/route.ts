@@ -4,18 +4,16 @@ import { validateAnswer } from '@/lib/quiz-logic';
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { userInput, correctAnswer, correctAnswers, answerType } = body;
+    const { userInput, correctAnswers } = body;
 
-    if (!userInput || (!correctAnswer && !correctAnswers)) {
+    if (!userInput || !correctAnswers) {
       return NextResponse.json(
-        { error: 'Missing userInput or correctAnswer' },
+        { error: 'Missing userInput or correctAnswers' },
         { status: 400 }
       );
     }
 
-    // 新しい形式（correctAnswers配列）をサポート
-    const answers = correctAnswers || [correctAnswer];
-    const isCorrect = validateAnswer(userInput, answers, answerType);
+    const isCorrect = validateAnswer(userInput, correctAnswers);
 
     return NextResponse.json({ isCorrect });
   } catch (error) {

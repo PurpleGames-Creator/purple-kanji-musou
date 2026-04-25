@@ -2,32 +2,52 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
+import { FeedbackAnimation } from './feedback-animation';
 
 type QuizQuestionProps = {
-  kanji: string;
-  questionText: string;
+  sentence: string;          // 「椅子に____。」
+  fullSentence: string;      // 「椅子に座る。」
+  kanji: string;             // 「座る」
+  reading: string;           // 「すわる」
   onAnswer: (answer: string) => void;
   onSkip?: () => void;
   isAnswered: boolean;
+  isCorrect?: boolean;
   skipCount?: number;
   maxSkips?: number;
 };
 
 export function QuizQuestion({
+  sentence,
+  fullSentence,
   kanji,
-  questionText,
+  reading,
   onAnswer,
   onSkip,
   isAnswered,
+  isCorrect,
   skipCount = 0,
   maxSkips = 2,
 }: QuizQuestionProps) {
   const [input, setInput] = useState('');
+  const [showFeedback, setShowFeedback] = useState(false);
 
   useEffect(() => {
-    // 次の問題に移るとき、入力をリセット
+    // 次の問題に移るとき、入力とフィードバックをリセット
     setInput('');
-  }, [kanji]);
+    setShowFeedback(false);
+  }, [sentence]);
+
+  useEffect(() => {
+    // 回答後、フィードバックを表示
+    if (isAnswered) {
+      setShowFeedback(true);
+      const timer = setTimeout(() => {
+        setShowFeedback(false);
+      }, 2000);
+      return () => clearTimeout(timer);
+    }
+  }, [isAnswered]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,33 +56,48 @@ export function QuizQuestion({
     }
   };
 
+  // 文に__の部分にアンダーラインを追加
+  const sentenceParts = sentence.split('____');
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4 }}
-      className="flex flex-col items-center gap-6 w-full max-w-md"
+      className="flex flex-col items-center gap-8 w-full max-w-md"
     >
-      {/* 漢字 */}
+      {/* フィードバックアニメーション */}
+      <FeedbackAnimation isCorrect={isCorrect ?? false} isVisible={showFeedback} />
+
+      {/* 短文形式で問題を表示 */}
       <motion.div
-        key={kanji}
-        initial={{ scale: 0, rotate: -20 }}
-        animate={{ scale: 1, rotate: 0 }}
-        transition={{ duration: 0.5, type: 'spring', stiffness: 100 }}
-        className="text-7xl sm:text-8xl font-black text-purple-700 text-stroke-1.5"
+        key={sentence}
+        initial={{ scale: 0.95, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 0.4, type: 'spring' }}
+        className="text-center"
       >
-        {kanji}
+        <p className="text-3xl sm:text-4xl font-black text-purple-900 leading-relaxed">
+          {sentenceParts[0]}
+          <span className="inline-block border-b-4 border-purple-600 px-1 min-w-[60px]">
+            {isAnswered ? kanji : ''}
+          </span>
+          {sentenceParts[1]}
+        </p>
       </motion.div>
 
-      {/* 問題文 */}
-      <motion.p
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.2 }}
-        className="text-lg text-purple-900 text-center font-semibold"
-      >
-        {questionText}
-      </motion.p>
+      {/* 回答後、正解を表示 */}
+      {isAnswered && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.3 }}
+          className="text-center"
+        >
+          <p className="text-sm text-gray-600 mb-2">正解</p>
+          <p className="text-2xl font-black text-purple-600">{reading}</p>
+        </motion.div>
+      )}
 
       {/* 入力フォーム */}
       <form

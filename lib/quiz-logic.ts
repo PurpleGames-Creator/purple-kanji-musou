@@ -1,38 +1,20 @@
 /**
  * ユーザー入力が正解かどうかを判定
- * ひらがなで比較、複数の読み方に対応、複数形式対応
+ * 新形式対応：correctAnswers に複数の正解形式（ひらがな・漢字）を含む
+ * 例：["すわる", "座る"]
  */
 export function validateAnswer(
   userInput: string,
-  correctAnswers: string[] | string,
-  answerType: 'full' | 'okuri' = 'full'
+  correctAnswers: string[] | string
 ): boolean {
   const normalized = userInput.trim();
 
   // 複数の正解に対応
   const answerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
 
+  // 完全一致判定
   for (const correctAnswer of answerList) {
-    // 各正解を処理
-    const expected = correctAnswer.trim();
-
-    if (answerType === 'okuri') {
-      // 送り仮名の場合は末尾から数文字を抽出
-      // 例：「読む」の場合「む」を期待値とする
-      if (normalized === expected) {
-        return true;
-      }
-      continue;
-    }
-
-    // 通常の判定（完全一致）
-    if (normalized === expected) {
-      return true;
-    }
-
-    // カンマで区切られた複数の読み方に対応
-    const alternatives = expected.split('、').map(a => a.trim());
-    if (alternatives.includes(normalized)) {
+    if (normalized === correctAnswer.trim()) {
       return true;
     }
   }

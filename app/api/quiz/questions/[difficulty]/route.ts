@@ -32,13 +32,14 @@ export async function GET(
     const questions = kanji_questions[
       difficultyKey as keyof typeof kanji_questions
     ] as Array<{
-      type: string;
+      difficulty: string;
+      sentence: string;
+      fullSentence: string;
       kanji: string;
       reading: string;
       correctAnswers: string[];
-      answerType: string;
-      jlpt: number;
       explanation: string;
+      type: string;
     }>;
 
     if (!questions || questions.length === 0) {
@@ -55,13 +56,14 @@ export async function GET(
     // Format response
     const formattedQuestions = selected.map((q, index) => ({
       id: `q_${difficultyValue}_${index}`,
-      type: q.type,
+      difficulty: q.difficulty,
+      sentence: q.sentence,
+      fullSentence: q.fullSentence,
       kanji: q.kanji,
       reading: q.reading,
       correctAnswers: q.correctAnswers,
-      answerType: q.answerType,
-      questionText: `「${q.kanji}」の読み方は？`,
       explanation: q.explanation,
+      type: q.type,
     }));
 
     return NextResponse.json({ questions: formattedQuestions });
