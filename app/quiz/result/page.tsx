@@ -158,7 +158,7 @@ function ResultContent() {
           </div>
           <div className="text-center">
             <p className="text-sm text-gray-600 mb-1">クリア時間</p>
-            <p className="text-2xl font-black text-purple-600">{parseFloat(time).toFixed(1)}秒</p>
+            <p className="text-2xl font-black text-purple-600">{time.toFixed(1)}秒</p>
           </div>
         </div>
       </motion.div>
