@@ -94,6 +94,29 @@ function QuizContent({
   }
 
   const currentQuestion = questions[currentQuestionIndex];
+
+  // Safety check: ensure currentQuestion exists and has required fields
+  if (!currentQuestion || !currentQuestion.sentence) {
+    return (
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="text-center">
+          <p className="text-red-600 font-bold mb-4">
+            データ読み込みエラー: 問題のsentenceフィールドが見つかりません
+          </p>
+          <p className="text-gray-600 mb-4">
+            {!currentQuestion ? '質問が未定義' : `現在の質問: ${JSON.stringify(currentQuestion)}`}
+          </p>
+          <button
+            onClick={() => router.back()}
+            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+          >
+            戻る
+          </button>
+        </div>
+      </div>
+    );
+  }
+
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   const handleAnswer = async (answer: string) => {
