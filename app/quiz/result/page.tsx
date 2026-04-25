@@ -147,10 +147,19 @@ function ResultContent() {
         </div>
 
         {/* Score details with animations */}
-        <div className="grid grid-cols-3 gap-4">
-          <ScoreDisplay value={correct} label="正解数" delay={0.5} suffix={` / ${total}`} />
-          <ScoreDisplay value={accuracy} label="正答率" delay={0.7} suffix="%" />
-          <ScoreDisplay value={Math.round(time)} label="クリア時間" delay={0.9} suffix="秒" />
+        <div className="flex justify-center gap-8 flex-wrap">
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-1">正解数</p>
+            <p className="text-2xl font-black text-purple-600">{correct} / {total}</p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-1">正答率</p>
+            <p className="text-2xl font-black text-purple-600">{accuracy}%</p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-gray-600 mb-1">クリア時間</p>
+            <p className="text-2xl font-black text-purple-600">{parseFloat(time).toFixed(1)}秒</p>
+          </div>
         </div>
       </motion.div>
 

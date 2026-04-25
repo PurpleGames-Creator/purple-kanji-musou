@@ -32,8 +32,11 @@ export async function GET(
     const questions = kanji_questions[
       difficultyKey as keyof typeof kanji_questions
     ] as Array<{
+      type: string;
       kanji: string;
       reading: string;
+      correctAnswers: string[];
+      answerType: string;
       jlpt: number;
       explanation: string;
     }>;
@@ -52,8 +55,11 @@ export async function GET(
     // Format response
     const formattedQuestions = selected.map((q, index) => ({
       id: `q_${difficultyValue}_${index}`,
+      type: q.type,
       kanji: q.kanji,
       reading: q.reading,
+      correctAnswers: q.correctAnswers,
+      answerType: q.answerType,
       questionText: `「${q.kanji}」の読み方は？`,
       explanation: q.explanation,
     }));

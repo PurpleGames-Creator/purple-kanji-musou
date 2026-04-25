@@ -32,6 +32,9 @@ function QuizContent({
   const [startTime] = useState(Date.now());
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [life, setLife] = useState(2);
+  const [skipCount, setSkipCount] = useState(0);
+  const maxSkips = 2;
 
   // Fetch questions on mount
   useEffect(() => {
@@ -91,6 +94,8 @@ function QuizContent({
   const handleAnswer = async (answer: string) => {
     setIsAnswered(true);
 
+    let isCorrect = false;
+
     // Validate answer
     try {
       const res = await fetch('/api/quiz/validate', {
@@ -98,13 +103,36 @@ function QuizContent({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           userInput: answer,
-          correctAnswer: currentQuestion.reading,
+          correctAnswers: currentQuestion.correctAnswers,
+          answerType: currentQuestion.answerType,
         }),
       });
 
       const data = await res.json();
       if (data.isCorrect) {
         setCorrectCount((prev) => prev + 1);
+        isCorrect = true;
+      } else {
+        // 間違い時はライフ -1
+        const newLife = life - 1;
+        setLife(newLife);
+
+        // ライフが0になったらゲームオーバー
+        if (newLife <= 0) {
+          setTimeout(() => {
+            const clearTimeSeconds = (Date.now() - startTime) / 1000;
+            router.push(
+              `/quiz/gameover?` +
+                `difficulty=${encodeURIComponent(difficulty)}&` +
+                `nickname=${encodeURIComponent(nickname)}&` +
+                `correct=${correctCount}&` +
+                `incorrect=${currentQuestionIndex - correctCount + 1}&` +
+                `questionNumber=${currentQuestionIndex + 1}&` +
+                `time=${clearTimeSeconds.toFixed(1)}`
+            );
+          }, 1500);
+          return;
+        }
       }
     } catch (err) {
       console.error('Validation error:', err);
@@ -112,17 +140,17 @@ function QuizContent({
 
     // Auto-advance to next question after 1.5 seconds
     setTimeout(() => {
-      if (isLastQuestion) {
+      if (isLastQuestion && isCorrect) {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
         router.push(
           `/quiz/result?` +
             `difficulty=${encodeURIComponent(difficulty)}&` +
             `nickname=${encodeURIComponent(nickname)}&` +
-            `correct=${correctCount + (currentQuestion ? 1 : 0)}&` +
+            `correct=${correctCount + 1}&` +
             `total=15&` +
             `time=${clearTimeSeconds.toFixed(1)}`
         );
-      } else {
+      } else if (!isLastQuestion || isCorrect) {
         setCurrentQuestionIndex((prev) => prev + 1);
         setIsAnswered(false);
       }
@@ -130,6 +158,8 @@ function QuizContent({
   };
 
   const handleSkip = () => {
+    if (skipCount >= maxSkips) return;
+    setSkipCount((prev) => prev + 1);
     setIsAnswered(true);
     setTimeout(() => {
       if (isLastQuestion) {
@@ -176,8 +206,15 @@ function QuizContent({
         <div className="text-sm font-black text-purple-900">
           {nickname}
         </div>
-        <div className="text-sm font-black text-purple-600">
-          {currentQuestionIndex + 1} / 15
+        <div className="flex gap-4 items-center">
+          <div className="text-sm font-black text-purple-600">
+            {currentQuestionIndex + 1} / 15
+          </div>
+          <div className="text-lg">
+            {life === 2 && '❤️❤️'}
+            {life === 1 && '❤️'}
+            {life === 0 && '💔'}
+          </div>
         </div>
       </div>
 
@@ -213,6 +250,8 @@ function QuizContent({
             onAnswer={handleAnswer}
             onSkip={handleSkip}
             isAnswered={isAnswered}
+            skipCount={skipCount}
+            maxSkips={maxSkips}
           />
 
           {/* Feedback message */}

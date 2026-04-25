@@ -9,6 +9,8 @@ type QuizQuestionProps = {
   onAnswer: (answer: string) => void;
   onSkip?: () => void;
   isAnswered: boolean;
+  skipCount?: number;
+  maxSkips?: number;
 };
 
 export function QuizQuestion({
@@ -17,6 +19,8 @@ export function QuizQuestion({
   onAnswer,
   onSkip,
   isAnswered,
+  skipCount = 0,
+  maxSkips = 2,
 }: QuizQuestionProps) {
   const [input, setInput] = useState('');
 
@@ -72,7 +76,7 @@ export function QuizQuestion({
           placeholder="ひらがなで答える"
           disabled={isAnswered}
           autoFocus
-          className="w-full px-4 py-3 text-lg border-2 border-purple-400 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed transition"
+          className="w-full px-4 py-3 text-lg border-2 border-purple-400 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed transition text-black placeholder-gray-600"
         />
 
         {/* ボタン */}
@@ -82,9 +86,9 @@ export function QuizQuestion({
             whileTap={{ scale: 0.95 }}
             type="submit"
             disabled={isAnswered || !input.trim()}
-            className="flex-1 py-3 bg-purple-600 text-white font-black rounded-lg hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition"
+            className="flex-1 py-3 bg-purple-600 text-white font-black rounded-lg hover:bg-purple-700 disabled:bg-gray-400 disabled:cursor-not-allowed transition text-lg"
           >
-            答える
+            攻撃！
           </motion.button>
 
           {onSkip && (
@@ -93,10 +97,13 @@ export function QuizQuestion({
               whileTap={{ scale: 0.95 }}
               type="button"
               onClick={onSkip}
-              disabled={isAnswered}
+              disabled={isAnswered || skipCount >= maxSkips}
               className="flex-1 py-3 bg-gray-400 text-white font-black rounded-lg hover:bg-gray-500 disabled:bg-gray-300 disabled:cursor-not-allowed transition"
             >
-              スキップ
+              <div className="flex flex-col items-center">
+                <span>スキップ</span>
+                <span className="text-sm">残り{maxSkips - skipCount}回</span>
+              </div>
             </motion.button>
           )}
         </div>

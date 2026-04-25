@@ -1,21 +1,40 @@
 /**
  * ユーザー入力が正解かどうかを判定
- * ひらがなで比較、複数の読み方に対応
+ * ひらがなで比較、複数の読み方に対応、複数形式対応
  */
-export function validateAnswer(userInput: string, correctAnswer: string): boolean {
-  // 余白を削除、小文字に統一
-  const normalized = userInput.trim().toLowerCase();
-  const expected = correctAnswer.trim().toLowerCase();
+export function validateAnswer(
+  userInput: string,
+  correctAnswers: string[] | string,
+  answerType: 'full' | 'okuri' = 'full'
+): boolean {
+  const normalized = userInput.trim();
 
-  // 完全一致
-  if (normalized === expected) {
-    return true;
-  }
+  // 複数の正解に対応
+  const answerList = Array.isArray(correctAnswers) ? correctAnswers : [correctAnswers];
 
-  // 複数の読み方に対応（カンマ区切り）
-  const alternatives = expected.split('、').map(a => a.trim());
-  if (alternatives.includes(normalized)) {
-    return true;
+  for (const correctAnswer of answerList) {
+    // 各正解を処理
+    const expected = correctAnswer.trim();
+
+    if (answerType === 'okuri') {
+      // 送り仮名の場合は末尾から数文字を抽出
+      // 例：「読む」の場合「む」を期待値とする
+      if (normalized === expected) {
+        return true;
+      }
+      continue;
+    }
+
+    // 通常の判定（完全一致）
+    if (normalized === expected) {
+      return true;
+    }
+
+    // カンマで区切られた複数の読み方に対応
+    const alternatives = expected.split('、').map(a => a.trim());
+    if (alternatives.includes(normalized)) {
+      return true;
+    }
   }
 
   return false;
