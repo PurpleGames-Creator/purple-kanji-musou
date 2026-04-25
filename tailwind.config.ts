@@ -6,6 +6,9 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        serif: ['Noto Serif JP', 'serif'],
+      },
       colors: {
         // Purple 基調カスタムカラー
         'purple-primary': '#8b5cf6', // 標準的な紫
@@ -14,6 +17,9 @@ const config: Config = {
       },
       backgroundColor: {
         gradient: 'linear-gradient(135deg, #8b5cf6 0%, #6d28d9 100%)',
+      },
+      backgroundImage: {
+        'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
       },
       boxShadow: {
         'purple-glow': '0 0 20px rgba(139, 92, 246, 0.5)',

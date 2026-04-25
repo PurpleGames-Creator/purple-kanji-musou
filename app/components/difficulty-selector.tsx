@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { getAllDifficultyKeys, getDifficultyLabel } from '@/lib/kanji-difficulty';
 import type { DifficultyLevel } from '@/lib/kanji-difficulty';
 import Link from 'next/link';
+import { AnimatedBackground } from './animated-background';
 
 export function DifficultySelector() {
   const [nickname, setNickname] = useState('');
@@ -35,15 +36,17 @@ export function DifficultySelector() {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-white px-4">
-      {/* タイトル */}
-      <motion.h1
+    <div className="flex flex-col items-center justify-center min-h-screen px-4 relative">
+      <AnimatedBackground />
+      <div className="relative z-10 w-full flex flex-col items-center">
+        {/* タイトル */}
+        <motion.h1
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6 }}
         className="text-4xl sm:text-5xl font-bold text-purple-900 mb-2 text-center"
       >
-        Purple漢字無双
+        <span>Purple</span><span className="font-serif">漢字無双</span>
       </motion.h1>
 
       <motion.p
@@ -69,7 +72,7 @@ export function DifficultySelector() {
           type="text"
           value={nickname}
           onChange={(e) => setNickname(e.target.value.slice(0, 30))}
-          placeholder="半角・全角20字まで"
+          placeholder="例：むらさき太郎"
           maxLength={30}
           className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 transition text-black placeholder-gray-500"
         />
@@ -146,6 +149,7 @@ export function DifficultySelector() {
           </button>
         )}
       </motion.div>
+      </div>
     </div>
   );
 }
