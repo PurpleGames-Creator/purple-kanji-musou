@@ -24,7 +24,7 @@ function ResultContent() {
 
   const accuracy = calculateAccuracy(correct, total);
 
-  // Save score to database
+  // Save score to database and unlock next difficulty
   useEffect(() => {
     const saveScore = async () => {
       if (isSaving) return;
@@ -46,6 +46,22 @@ function ResultContent() {
         if (!response.ok) {
           throw new Error('Failed to save score');
         }
+
+        // Unlock next difficulty based on completion
+        const unlockedDifficulties = JSON.parse(
+          localStorage.getItem('unlockedDifficulties') || '["easy", "normal"]'
+        );
+
+        if (difficulty === 'hard' && correct >= 10) {
+          unlockedDifficulties.push('veryhard');
+        } else if (difficulty === 'veryhard' && correct >= 10) {
+          unlockedDifficulties.push('hellish');
+        }
+
+        localStorage.setItem(
+          'unlockedDifficulties',
+          JSON.stringify([...new Set(unlockedDifficulties)])
+        );
       } catch (err) {
         setError(
           err instanceof Error ? err.message : 'Failed to save score'

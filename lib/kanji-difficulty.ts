@@ -5,7 +5,7 @@ export const DIFFICULTY_CONFIG: Record<DifficultyLevel, { label: string; value: 
   normal: { label: '普通', value: 2 },
   hard: { label: '難関', value: 3 },
   veryhard: { label: '激ムズ', value: 4 },
-  hellish: { label: '無限地獄', value: 5 },
+  hellish: { label: '超激ムズ', value: 5 },
 };
 
 /**
