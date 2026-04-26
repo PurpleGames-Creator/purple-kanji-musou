@@ -27,6 +27,19 @@ export function validateAnswer(
     }
   }
 
+  // 複合語の場合、各単語でも正解と判定
+  // 例：「みずにながす」の場合、「みずに」「ながす」も正解
+  for (const correctAnswer of hiraganaAnswers) {
+    const trimmed = correctAnswer.trim();
+    // 助詞で分割して、各単語を正解として判定
+    const words = trimmed.split(/[にをがはで]/);
+    for (const word of words) {
+      if (word.trim() && normalized === word.trim() && word.trim().length > 0) {
+        return true;
+      }
+    }
+  }
+
   // 送り仮名を除いた形式も判定
   // 例：「すわる」→「る」を除いた「すわ」も正解
   // 長い送り仮名を先に判定（greedy matching）
