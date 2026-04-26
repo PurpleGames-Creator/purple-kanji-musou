@@ -105,18 +105,19 @@ export function QuizQuestion({
         </p>
       </motion.div>
 
-      {/* 正解時のみ、正解を表示 */}
-      {isAnswered && isCorrect && (
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="text-center"
-        >
-          <p className="text-sm text-gray-600 mb-2">正解</p>
-          <p className="text-2xl font-black text-purple-600">{reading}</p>
-        </motion.div>
-      )}
+      {/* 正解表示（常に占有スペース、正解時のみ表示） */}
+      <motion.div
+        initial={{ opacity: 0, y: 10 }}
+        animate={{
+          opacity: isAnswered && isCorrect ? 1 : 0,
+          y: 0
+        }}
+        transition={{ delay: 0.3 }}
+        className="text-center h-20 flex flex-col items-center justify-center"
+      >
+        <p className="text-sm text-gray-600 mb-2">正解</p>
+        <p className="text-2xl font-black text-purple-600">{reading}</p>
+      </motion.div>
 
       {/* 入力フォーム */}
       <form
