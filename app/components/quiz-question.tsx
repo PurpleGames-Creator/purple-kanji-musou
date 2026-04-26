@@ -87,7 +87,7 @@ export function QuizQuestion({
       {/* フィードバックアニメーション */}
       <FeedbackAnimation isCorrect={isCorrect ?? false} isVisible={showFeedback} />
 
-      {/* 短文形式で問題を表示 */}
+      {/* 完全文を表示 - 答えるべき部分に下線を引く */}
       <motion.div
         key={sentence}
         initial={{ scale: 0.95, opacity: 0 }}
@@ -95,18 +95,8 @@ export function QuizQuestion({
         transition={{ duration: 0.4, type: 'spring' }}
         className="text-center"
       >
-        {/* 問題文（穴埋め） */}
-        <p className="text-3xl sm:text-4xl font-black text-purple-900 leading-relaxed mb-4">
-          {sentenceParts[0]}
-          <span className="inline-block border-b-4 border-purple-600 px-1 min-w-[60px]">
-            {isAnswered ? kanji : ''}
-          </span>
-          {sentenceParts[1]}
-        </p>
-
-        {/* 完全文（ヒント・参考用）- 答えるべき部分に下線を引く */}
-        <p className="text-lg text-gray-700 font-semibold">
-          例: {renderFullSentenceWithUnderline(fullSentence, kanji)}
+        <p className="text-3xl sm:text-4xl font-black text-purple-900 leading-relaxed">
+          {renderFullSentenceWithUnderline(fullSentence, kanji)}
         </p>
       </motion.div>
 
