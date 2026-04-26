@@ -62,6 +62,18 @@ function QuizContent({
     fetchQuestions();
   }, [difficulty]);
 
+  // Disable scrolling/swiping during quiz
+  useEffect(() => {
+    const preventScroll = (e: TouchEvent) => {
+      e.preventDefault();
+    };
+
+    window.addEventListener('touchmove', preventScroll, { passive: false });
+    return () => {
+      window.removeEventListener('touchmove', preventScroll);
+    };
+  }, []);
+
   if (isLoading) {
     return (
       <div className="flex items-center justify-center min-h-screen">
@@ -140,21 +152,14 @@ function QuizContent({
         setIsCorrect(true);
         setIsAnswered(true);
       } else {
-        // Wrong answer - show feedback but allow retry
-        setIsCorrect(false);
-        setIsAnswered(true);
-
-        // Show feedback for 1 second, then reset for retry
-        setTimeout(() => {
-          setIsAnswered(false);
-        }, 1000);
-
-        // Deduct life for wrong answer
+        // Wrong answer - no feedback shown, just deduct life and allow retry
         const newLife = life - 1;
         setLife(newLife);
 
         // Game over if life reaches 0
         if (newLife <= 0) {
+          setIsAnswered(true);
+          setIsCorrect(false);
           setTimeout(() => {
             const clearTimeSeconds = (Date.now() - startTime) / 1000;
             router.push(
@@ -169,13 +174,13 @@ function QuizContent({
           }, 2000);
           return;
         }
-        return; // Exit early, don't proceed to next question
+        return; // Exit early, don't show feedback or proceed to next question
       }
     } catch (err) {
       console.error('Validation error:', err);
     }
 
-    // Auto-advance to next question after 2 seconds (only for correct answers)
+    // Auto-advance to next question after 4 seconds (only for correct answers)
     if (correct) {
       setTimeout(() => {
         if (isLastQuestion) {
@@ -193,7 +198,7 @@ function QuizContent({
           setIsAnswered(false);
           setIsCorrect(false);
         }
-      }, 2000);
+      }, 4000);
     }
   };
 
@@ -222,14 +227,14 @@ function QuizContent({
   };
 
   const handleTimeUp = () => {
-    // Time's up - treat as wrong answer
+    // Time's up - show feedback for 4 seconds then move on
     setIsAnswered(true);
     setIsCorrect(false);
     const newLife = life - 1;
     setLife(newLife);
 
     if (newLife <= 0) {
-      // Game over
+      // Game over - show feedback for 4 seconds then redirect
       setTimeout(() => {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
         router.push(
@@ -241,11 +246,11 @@ function QuizContent({
             `questionNumber=${currentQuestionIndex + 1}&` +
             `time=${clearTimeSeconds.toFixed(1)}`
         );
-      }, 2000);
+      }, 4000);
       return;
     }
 
-    // Move to next question after showing feedback
+    // Move to next question after showing feedback for 4 seconds
     setTimeout(() => {
       if (isLastQuestion) {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
@@ -262,7 +267,7 @@ function QuizContent({
         setIsAnswered(false);
         setIsCorrect(false);
       }
-    }, 2000);
+    }, 4000);
   };
 
   return (
