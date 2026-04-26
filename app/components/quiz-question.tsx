@@ -105,8 +105,8 @@ export function QuizQuestion({
         </p>
       </motion.div>
 
-      {/* 回答後、正解を表示 */}
-      {isAnswered && (
+      {/* 正解時のみ、正解を表示 */}
+      {isAnswered && isCorrect && (
         <motion.div
           initial={{ opacity: 0, y: 10 }}
           animate={{ opacity: 1, y: 0 }}

@@ -152,29 +152,8 @@ function QuizContent({
         setIsCorrect(true);
         setIsAnswered(true);
       } else {
-        // Wrong answer - no feedback shown, just deduct life and allow retry
-        const newLife = life - 1;
-        setLife(newLife);
-
-        // Game over if life reaches 0
-        if (newLife <= 0) {
-          setIsAnswered(true);
-          setIsCorrect(false);
-          setTimeout(() => {
-            const clearTimeSeconds = (Date.now() - startTime) / 1000;
-            router.push(
-              `/quiz/gameover?` +
-                `difficulty=${encodeURIComponent(difficulty)}&` +
-                `nickname=${encodeURIComponent(nickname)}&` +
-                `correct=${correctCount}&` +
-                `incorrect=${currentQuestionIndex - correctCount + 1}&` +
-                `questionNumber=${currentQuestionIndex + 1}&` +
-                `time=${clearTimeSeconds.toFixed(1)}`
-            );
-          }, 2000);
-          return;
-        }
-        return; // Exit early, don't show feedback or proceed to next question
+        // Wrong answer - no penalty, just allow retry within 15 seconds
+        return; // Exit early, don't proceed to next question
       }
     } catch (err) {
       console.error('Validation error:', err);
@@ -227,28 +206,9 @@ function QuizContent({
   };
 
   const handleTimeUp = () => {
-    // Time's up - show feedback for 4 seconds then move on
+    // Time's up - show feedback for 4 seconds then move to next question
     setIsAnswered(true);
     setIsCorrect(false);
-    const newLife = life - 1;
-    setLife(newLife);
-
-    if (newLife <= 0) {
-      // Game over - show feedback for 4 seconds then redirect
-      setTimeout(() => {
-        const clearTimeSeconds = (Date.now() - startTime) / 1000;
-        router.push(
-          `/quiz/gameover?` +
-            `difficulty=${encodeURIComponent(difficulty)}&` +
-            `nickname=${encodeURIComponent(nickname)}&` +
-            `correct=${correctCount}&` +
-            `incorrect=${currentQuestionIndex - correctCount + 1}&` +
-            `questionNumber=${currentQuestionIndex + 1}&` +
-            `time=${clearTimeSeconds.toFixed(1)}`
-        );
-      }, 4000);
-      return;
-    }
 
     // Move to next question after showing feedback for 4 seconds
     setTimeout(() => {
