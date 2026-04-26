@@ -311,6 +311,7 @@ function QuizContent({
                 maxSkips={maxSkips}
               />
             </div>
+          </div>
         </div>
       </div>
 
