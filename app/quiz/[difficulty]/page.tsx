@@ -6,7 +6,6 @@ import { Suspense } from 'react';
 import { motion } from 'framer-motion';
 import { QuizQuestion } from '@/app/components/quiz-question';
 import { QuizTimer } from '@/app/components/quiz-timer';
-import { MonsterDisplay } from '@/app/components/monster-display';
 
 type QuizQuestion = {
   id: string;
@@ -261,15 +260,10 @@ function QuizContent({
           <div className="text-xs font-black text-purple-900">
             {nickname}
           </div>
-          <div className="flex gap-2 items-center">
-            <div className="text-xs font-black text-purple-600">
-              {currentQuestionIndex + 1} / 15
-            </div>
-            <div className="text-sm">
-              {life === 2 && '❤️❤️'}
-              {life === 1 && '❤️'}
-              {life === 0 && '💔'}
-            </div>
+          <div className="text-sm">
+            {life === 2 && '❤️❤️'}
+            {life === 1 && '❤️'}
+            {life === 0 && '💔'}
           </div>
         </div>
 
@@ -288,20 +282,9 @@ function QuizContent({
         </div>
 
         {/* Main game area - compact layout */}
-        <div className="flex-1 w-full flex gap-2 items-start justify-center overflow-hidden">
-          {/* Left: Monster display - smaller */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.4 }}
-            className="flex-shrink-0"
-            style={{ width: '80px', height: '80px' }}
-          >
-            <MonsterDisplay questionNumber={currentQuestionIndex + 1} />
-          </motion.div>
-
-          {/* Right: Quiz area - compact */}
-          <div className="flex-1 flex flex-col items-center gap-2 overflow-hidden">
+        <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
+          {/* Quiz area - centered */}
+          <div className="flex flex-col items-center gap-2 overflow-hidden">
             {/* Timer */}
             {!isAnswered && (
               <motion.div
@@ -328,7 +311,6 @@ function QuizContent({
                 maxSkips={maxSkips}
               />
             </div>
-          </div>
         </div>
       </div>
 
