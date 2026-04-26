@@ -29,7 +29,12 @@ export function validateAnswer(
 
   // 送り仮名を除いた形式も判定
   // 例：「すわる」→「る」を除いた「すわ」も正解
-  const okuriPatterns = ['る', 'い', 'た', 'ない', 'たい', 'ている', 'られる', 'せる', 'させる', 'めく'];
+  const okuriPatterns = [
+    // 長い送り仮名を先に判定（greedy matching）
+    'させる', 'られる', 'ている', 'ない', 'たい', 'ける',
+    // 1文字の送り仮名
+    'る', 'い', 'た', 'む', 'ぶ', 'ぐ', 'ぐ', 'す', 'つ', 'ず', 'わる'
+  ];
 
   for (const correctAnswer of hiraganaAnswers) {
     const trimmed = correctAnswer.trim();
