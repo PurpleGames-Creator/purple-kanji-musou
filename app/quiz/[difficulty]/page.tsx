@@ -271,7 +271,7 @@ function QuizContent({
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gradient-to-br from-purple-50 to-white px-4 py-4">
+    <div className="flex flex-col min-h-screen overflow-hidden bg-gradient-to-br from-purple-50 to-white px-4 py-4">
       {/* Upper half - All game content (50vh) */}
       <div className="h-1/2 flex flex-col gap-2 overflow-hidden">
         {/* Header */}

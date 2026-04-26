@@ -32,9 +32,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} ${notoSansJp.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} ${notoSansJp.variable} h-full overflow-hidden antialiased`}
     >
-      <body className="min-h-full flex flex-col font-sans text-white text-stroke-black">{children}</body>
+      <body className="min-h-full overflow-hidden flex flex-col font-sans text-white text-stroke-black">{children}</body>
     </html>
   );
 }
