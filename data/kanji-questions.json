@@ -7598,18 +7598,6 @@
     },
     {
       "difficulty": "easy",
-      "sentence": "ことわざ",
-      "fullSentence": "ことわざ",
-      "kanji": "ことわざ",
-      "reading": "ことわざ",
-      "correctAnswers": [
-        "ことわざ"
-      ],
-      "explanation": "昔から言い伝えられた短い言葉。",
-      "type": "idiom"
-    },
-    {
-      "difficulty": "easy",
       "sentence": "塩対応",
       "fullSentence": "塩対応",
       "kanji": "塩対応",
@@ -7834,18 +7822,6 @@
         "ねがいがかなう"
       ],
       "explanation": "望みが実現する。",
-      "type": "idiom"
-    },
-    {
-      "difficulty": "easy",
-      "sentence": "ことわざ",
-      "fullSentence": "ことわざ",
-      "kanji": "ことわざ",
-      "reading": "ことわざ",
-      "correctAnswers": [
-        "ことわざ"
-      ],
-      "explanation": "昔から言い伝えられた短い言葉。",
       "type": "idiom"
     },
     {
@@ -8646,7 +8622,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -9006,7 +8982,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -9366,7 +9342,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -9726,7 +9702,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -10086,7 +10062,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -10446,7 +10422,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -10806,7 +10782,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -11166,7 +11142,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -11526,7 +11502,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
@@ -11886,7 +11862,7 @@
       "difficulty": "normal",
       "sentence": "その音は____。",
       "fullSentence": "その音はうるさい。",
-      "kanji": "うるさい",
+      "kanji": "煩い",
       "reading": "うるさい",
       "correctAnswers": [
         "うるさい"
