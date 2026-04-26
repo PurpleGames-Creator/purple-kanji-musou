@@ -282,7 +282,7 @@ function QuizContent({
         </div>
 
         {/* Main game area - compact layout */}
-        <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
+        <div className="flex-1 w-full flex items-start justify-center overflow-hidden">
           {/* Quiz area - centered */}
           <div className="flex flex-col items-center gap-2 overflow-hidden">
             {/* Timer */}
