@@ -253,90 +253,109 @@ function QuizContent({
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-purple-50 to-white px-4 py-4">
-      {/* Header */}
-      <div className="w-full max-w-2xl flex justify-between items-center mb-4 flex-shrink-0">
-        <div className="text-sm font-black text-purple-900">
-          {nickname}
-        </div>
-        <div className="flex gap-4 items-center">
-          <div className="text-sm font-black text-purple-600">
-            {currentQuestionIndex + 1} / 15
+    <div className="flex flex-col h-screen bg-gradient-to-br from-purple-50 to-white px-4 py-4">
+      {/* Upper half - All game content (50vh) */}
+      <div className="h-1/2 flex flex-col gap-2 overflow-hidden">
+        {/* Header */}
+        <div className="w-full flex justify-between items-center flex-shrink-0">
+          <div className="text-xs font-black text-purple-900">
+            {nickname}
           </div>
-          <div className="text-lg">
-            {life === 2 && '❤️❤️'}
-            {life === 1 && '❤️'}
-            {life === 0 && '💔'}
+          <div className="flex gap-2 items-center">
+            <div className="text-xs font-black text-purple-600">
+              {currentQuestionIndex + 1} / 15
+            </div>
+            <div className="text-sm">
+              {life === 2 && '❤️❤️'}
+              {life === 1 && '❤️'}
+              {life === 0 && '💔'}
+            </div>
           </div>
         </div>
-      </div>
 
-      {/* Main game area */}
-      <div className="flex-1 overflow-y-auto w-full max-w-2xl flex flex-col lg:flex-row gap-4 items-center justify-center">
-        {/* Left: Monster display */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          className="flex-1 flex flex-col items-center"
-        >
-          <MonsterDisplay questionNumber={currentQuestionIndex + 1} />
-        </motion.div>
-
-        {/* Right: Quiz area */}
-        <div className="flex-1 flex flex-col items-center gap-6">
-          {/* Timer */}
-          {!isAnswered && (
+        {/* Progress bar */}
+        <div className="w-full flex-shrink-0">
+          <div className="w-full bg-purple-200 rounded-full h-1 overflow-hidden">
             <motion.div
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
+              className="bg-gradient-to-r from-purple-600 to-purple-700 h-full"
+              initial={{ width: 0 }}
+              animate={{
+                width: `${((currentQuestionIndex + 1) / 15) * 100}%`,
+              }}
               transition={{ duration: 0.3 }}
-            >
-              <QuizTimer initialSeconds={15} onTimeUp={handleTimeUp} />
-            </motion.div>
-          )}
-
-          {/* Question and input */}
-          <QuizQuestion
-            sentence={currentQuestion.sentence}
-            fullSentence={currentQuestion.fullSentence}
-            kanji={currentQuestion.kanji}
-            reading={currentQuestion.reading}
-            onAnswer={handleAnswer}
-            onSkip={handleSkip}
-            isAnswered={isAnswered}
-            isCorrect={isCorrect}
-            skipCount={skipCount}
-            maxSkips={maxSkips}
-          />
-
-          {/* Explanation after answering */}
-          {isAnswered && (
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.5 }}
-              className="text-center"
-            >
-              <p className="text-sm text-gray-600">{currentQuestion.explanation}</p>
-            </motion.div>
-          )}
+            />
+          </div>
         </div>
-      </div>
 
-      {/* Progress bar */}
-      <div className="w-full max-w-2xl flex-shrink-0 mt-2">
-        <div className="w-full bg-purple-200 rounded-full h-2 overflow-hidden">
+        {/* Main game area - compact layout */}
+        <div className="flex-1 w-full flex gap-2 items-start justify-center overflow-hidden">
+          {/* Left: Monster display - smaller */}
           <motion.div
-            className="bg-gradient-to-r from-purple-600 to-purple-700 h-full"
-            initial={{ width: 0 }}
-            animate={{
-              width: `${((currentQuestionIndex + 1) / 15) * 100}%`,
-            }}
-            transition={{ duration: 0.3 }}
-          />
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4 }}
+            className="flex-shrink-0"
+            style={{ width: '80px', height: '80px' }}
+          >
+            <MonsterDisplay questionNumber={currentQuestionIndex + 1} />
+          </motion.div>
+
+          {/* Right: Quiz area - compact */}
+          <div className="flex-1 flex flex-col items-center gap-2 overflow-hidden">
+            {/* Timer */}
+            {!isAnswered && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <QuizTimer initialSeconds={15} onTimeUp={handleTimeUp} />
+              </motion.div>
+            )}
+
+            {/* Question and input - keep original size */}
+            <div className="flex-1 flex flex-col items-center justify-center overflow-hidden">
+              <QuizQuestion
+                sentence={currentQuestion.sentence}
+                fullSentence={currentQuestion.fullSentence}
+                kanji={currentQuestion.kanji}
+                reading={currentQuestion.reading}
+                onAnswer={handleAnswer}
+                onSkip={handleSkip}
+                isAnswered={isAnswered}
+                isCorrect={isCorrect}
+                skipCount={skipCount}
+                maxSkips={maxSkips}
+              />
+            </div>
+          </div>
         </div>
       </div>
+
+      {/* Lower half - Keyboard area (50vh) - reserved for mobile keyboard */}
+      <div className="h-1/2"></div>
+
+      {/* Explanation modal - floating popup */}
+      {isAnswered && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          className="fixed inset-0 bg-black/40 flex items-center justify-center z-50"
+        >
+          <motion.div
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: 'spring', damping: 15 }}
+            className="bg-white rounded-lg p-6 max-w-xs mx-4 text-center shadow-2xl"
+          >
+            <p className="text-sm text-gray-700 font-semibold mb-4">
+              {currentQuestion.explanation}
+            </p>
+            <p className="text-xs text-gray-500">2秒後に次の問題へ...</p>
+          </motion.div>
+        </motion.div>
+      )}
     </div>
   );
 }
