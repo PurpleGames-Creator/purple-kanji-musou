@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { FeedbackAnimation } from './feedback-animation';
 
@@ -49,11 +49,16 @@ export function QuizQuestion({
 }: QuizQuestionProps) {
   const [input, setInput] = useState('');
   const [showFeedback, setShowFeedback] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     // 次の問題に移るとき、入力とフィードバックをリセット
     setInput('');
     setShowFeedback(false);
+    // Auto-focus input field for new question
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 0);
   }, [sentence]);
 
   useEffect(() => {
@@ -119,12 +124,12 @@ export function QuizQuestion({
         className="w-full flex flex-col gap-4"
       >
         <input
+          ref={inputRef}
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           placeholder="ひらがなで答える"
           disabled={isAnswered}
-          autoFocus
           className="w-full px-4 py-3 text-lg border-2 border-purple-400 rounded-lg focus:outline-none focus:border-purple-600 focus:ring-2 focus:ring-purple-300 disabled:bg-gray-100 disabled:text-gray-500 disabled:cursor-not-allowed transition text-black placeholder-gray-600"
         />
 
