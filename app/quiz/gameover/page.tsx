@@ -26,8 +26,7 @@ function GameOverContent() {
         transition={{ duration: 0.6, type: 'spring', stiffness: 100 }}
         className="text-center mb-12"
       >
-        <h1 className="text-5xl font-black text-red-600 mb-4">ゲームオーバー</h1>
-        <p className="text-2xl font-black text-red-500">ライフが0になりました</p>
+        <h1 className="text-5xl font-black text-red-600">ゲームオーバー</h1>
       </motion.div>
 
       {/* Stats */}
@@ -48,14 +47,9 @@ function GameOverContent() {
             <p className="text-4xl font-black text-red-600">{incorrect}問</p>
           </div>
 
-          <div className="border-b-2 border-purple-200 pb-4">
+          <div>
             <p className="text-sm text-gray-600 mb-2">正答率</p>
             <p className="text-4xl font-black text-purple-600">{accuracy}%</p>
-          </div>
-
-          <div className="border-b-2 border-purple-200 pb-4">
-            <p className="text-sm text-gray-600 mb-2">失敗した問題番号</p>
-            <p className="text-4xl font-black text-orange-600">{questionNumber}問目</p>
           </div>
 
           <div>
