@@ -300,36 +300,34 @@ function QuizContent({
           </div>
         </div>
 
-        {/* Main game area - compact layout */}
-        <div className="flex-1 w-full flex items-start justify-center overflow-hidden">
-          {/* Quiz area - centered */}
-          <div className="flex flex-col items-center gap-2 overflow-hidden">
-            {/* Timer */}
-            {!isAnswered && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <QuizTimer initialSeconds={15} onTimeUp={handleTimeUp} />
-              </motion.div>
-            )}
+        {/* Main game area - Timer on left, content on right */}
+        <div className="flex-1 w-full flex gap-2 items-start overflow-hidden">
+          {/* Timer on left */}
+          {!isAnswered && (
+            <motion.div
+              className="flex-shrink-0 pt-2"
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <QuizTimer initialSeconds={15} onTimeUp={handleTimeUp} />
+            </motion.div>
+          )}
 
-            {/* Question and input - keep original size */}
-            <div className="flex-1 flex flex-col items-center justify-center overflow-hidden">
-              <QuizQuestion
-                sentence={currentQuestion.sentence}
-                fullSentence={currentQuestion.fullSentence}
-                kanji={currentQuestion.kanji}
-                reading={currentQuestion.reading}
-                onAnswer={handleAnswer}
-                onSkip={handleSkip}
-                isAnswered={isAnswered}
-                isCorrect={isCorrect}
-                skipCount={skipCount}
-                maxSkips={maxSkips}
-              />
-            </div>
+          {/* Question and input on right - pushed to top */}
+          <div className="flex-1 flex flex-col items-center justify-start overflow-hidden">
+            <QuizQuestion
+              sentence={currentQuestion.sentence}
+              fullSentence={currentQuestion.fullSentence}
+              kanji={currentQuestion.kanji}
+              reading={currentQuestion.reading}
+              onAnswer={handleAnswer}
+              onSkip={handleSkip}
+              isAnswered={isAnswered}
+              isCorrect={isCorrect}
+              skipCount={skipCount}
+              maxSkips={maxSkips}
+            />
           </div>
         </div>
       </div>
