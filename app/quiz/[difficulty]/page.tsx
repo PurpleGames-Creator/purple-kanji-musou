@@ -119,8 +119,6 @@ function QuizContent({
   const isLastQuestion = currentQuestionIndex === questions.length - 1;
 
   const handleAnswer = async (answer: string) => {
-    setIsAnswered(true);
-
     let correct = false;
 
     // Validate answer
@@ -136,16 +134,26 @@ function QuizContent({
 
       const data = await res.json();
       if (data.isCorrect) {
+        // Correct answer
         setCorrectCount((prev) => prev + 1);
         correct = true;
         setIsCorrect(true);
+        setIsAnswered(true);
       } else {
-        // 間違い時はライフ -1
+        // Wrong answer - show feedback but allow retry
+        setIsCorrect(false);
+        setIsAnswered(true);
+
+        // Show feedback for 1 second, then reset for retry
+        setTimeout(() => {
+          setIsAnswered(false);
+        }, 1000);
+
+        // Deduct life for wrong answer
         const newLife = life - 1;
         setLife(newLife);
-        setIsCorrect(false);
 
-        // ライフが0になったらゲームオーバー
+        // Game over if life reaches 0
         if (newLife <= 0) {
           setTimeout(() => {
             const clearTimeSeconds = (Date.now() - startTime) / 1000;
@@ -161,29 +169,32 @@ function QuizContent({
           }, 2000);
           return;
         }
+        return; // Exit early, don't proceed to next question
       }
     } catch (err) {
       console.error('Validation error:', err);
     }
 
-    // Auto-advance to next question after 2 seconds (wait for feedback animation)
-    setTimeout(() => {
-      if (isLastQuestion && correct) {
-        const clearTimeSeconds = (Date.now() - startTime) / 1000;
-        router.push(
-          `/quiz/result?` +
-            `difficulty=${encodeURIComponent(difficulty)}&` +
-            `nickname=${encodeURIComponent(nickname)}&` +
-            `correct=${correctCount + 1}&` +
-            `total=15&` +
-            `time=${clearTimeSeconds.toFixed(1)}`
-        );
-      } else if (!isLastQuestion || correct) {
-        setCurrentQuestionIndex((prev) => prev + 1);
-        setIsAnswered(false);
-        setIsCorrect(false);
-      }
-    }, 2000);
+    // Auto-advance to next question after 2 seconds (only for correct answers)
+    if (correct) {
+      setTimeout(() => {
+        if (isLastQuestion) {
+          const clearTimeSeconds = (Date.now() - startTime) / 1000;
+          router.push(
+            `/quiz/result?` +
+              `difficulty=${encodeURIComponent(difficulty)}&` +
+              `nickname=${encodeURIComponent(nickname)}&` +
+              `correct=${correctCount + 1}&` +
+              `total=15&` +
+              `time=${clearTimeSeconds.toFixed(1)}`
+          );
+        } else {
+          setCurrentQuestionIndex((prev) => prev + 1);
+          setIsAnswered(false);
+          setIsCorrect(false);
+        }
+      }, 2000);
+    }
   };
 
   const handleSkip = () => {
@@ -211,12 +222,14 @@ function QuizContent({
   };
 
   const handleTimeUp = () => {
+    // Time's up - treat as wrong answer
     setIsAnswered(true);
     setIsCorrect(false);
     const newLife = life - 1;
     setLife(newLife);
 
     if (newLife <= 0) {
+      // Game over
       setTimeout(() => {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
         router.push(
@@ -232,6 +245,7 @@ function QuizContent({
       return;
     }
 
+    // Move to next question after showing feedback
     setTimeout(() => {
       if (isLastQuestion) {
         const clearTimeSeconds = (Date.now() - startTime) / 1000;
