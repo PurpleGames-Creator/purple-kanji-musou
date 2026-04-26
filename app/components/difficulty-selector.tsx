@@ -49,15 +49,15 @@ export function DifficultySelector() {
       <div className="absolute inset-0 bg-black/20 z-0"></div>
 
       <div className="relative z-10 w-full flex flex-col items-center justify-start min-h-screen">
-        {/* スペーサー - コンテンツを中央に配置 */}
-        <div className="flex-[2]"></div>
+        {/* スペーサー - コンテンツを上に配置 */}
+        <div className="flex-[4]"></div>
 
         {/* ニックネーム入力 */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="w-full max-w-sm mb-32"
+          className="w-full max-w-sm mb-4"
         >
           <label className="block text-sm font-semibold text-white mb-2 drop-shadow-lg">
             ニックネーム
